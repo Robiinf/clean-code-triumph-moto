@@ -1,0 +1,16 @@
+export type MaintenanceType =
+  | "Accident Repair"
+  | "Scheduled Maintenance"
+  | "Preventive Maintenance"
+  | "Corrective Maintenance"
+  | "Engine Overhaul"
+  | "Brake Service"
+  | "Tire Replacement"
+  | "Oil Change"
+  | "Chain and Sprocket Replacement"
+  | "Battery Service"
+  | "Electrical Repair"
+  | "Suspension Service"
+  | "Cooling System Service"
+  | "Exhaust Repair"
+  | "Fuel System Cleaning";
