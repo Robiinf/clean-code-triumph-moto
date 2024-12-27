@@ -1,4 +1,3 @@
-import { CompanyEntity } from "../../../domain/entities/CompanyEntity";
 import type { CompanyRepository } from "../../repositories/CompanyRepository";
 import { CompanyName } from "../../../domain/types/CompanyName";
 import { CompanySiret } from "../../../domain/types/CompanySiret";
