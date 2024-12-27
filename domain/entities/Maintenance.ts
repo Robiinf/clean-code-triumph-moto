@@ -1,6 +1,6 @@
-import { MaintenanceType } from "../value-object/maintenance-type";
-import { Mileage } from "../value-object/mileage";
-import { ReplacedPart } from "../value-object/replaced-part";
+import { MaintenanceType } from "../types/maintenance-type";
+import { Mileage } from "../types/mileage";
+import { ReplacedPart } from "../types/replaced-part";
 import { Motorcycle } from "./Motorcycle";
 
 export class Maintenance {

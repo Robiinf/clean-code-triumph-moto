@@ -1,8 +1,8 @@
-import { fuelCapacity } from "../value-object/fuel-capacity";
-import { fuelType } from "../value-object/fuel-type";
-import { Mileage } from "../value-object/mileage";
-import { MotorcycleType } from "../value-object/motorcycle-type";
-import { VIN } from "../value-object/vehicule-indenfication-number";
+import { fuelCapacity } from "../types/fuel-capacity";
+import { fuelType } from "../types/fuel-type";
+import { Mileage } from "../types/mileage";
+import { MotorcycleType } from "../types/motorcycle-type";
+import { VIN } from "../types/vehicule-indenfication-number";
 
 export class Motorcycle {
   constructor(

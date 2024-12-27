@@ -1,5 +1,5 @@
 import { SparePart } from "../../../domain/entities/SparePart";
-import { StockQuantity } from "../../../domain/value-object/stock";
+import { StockQuantity } from "../../../domain/types/stock";
 import { StockRepository } from "../../repositories/StockRepository";
 
 export class addStock {
