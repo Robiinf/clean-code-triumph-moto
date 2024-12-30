@@ -11,7 +11,7 @@ export class AddDriver {
     email: string,
     birthDate: Date,
     companyId: string,
-    DriverLicenseId: string
+    driverLicenseId: string
   ) {
     const driver = DriverEntity.create(
       firstName,
@@ -20,7 +20,7 @@ export class AddDriver {
       email,
       birthDate,
       companyId,
-      DriverLicenseId
+      driverLicenseId
     );
 
     await this.driverRepository.save(driver);

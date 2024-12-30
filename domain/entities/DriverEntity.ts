@@ -9,7 +9,7 @@ export class DriverEntity {
     public createdAt: Date,
     public updatedAt: Date,
     public companyId: string,
-    public DriverLicenseId: string
+    public driverLicenseId: string
   ) {}
 
   public static create(
@@ -19,7 +19,7 @@ export class DriverEntity {
     email: string,
     birthDate: Date,
     companyId: string,
-    DriverLicenseId: string
+    driverLicenseId: string
   ): DriverEntity {
     const id = crypto.randomUUID();
     const createdAt = new Date();
@@ -34,7 +34,7 @@ export class DriverEntity {
       createdAt,
       updatedAt,
       companyId,
-      DriverLicenseId
+      driverLicenseId
     );
   }
 }
