@@ -1,4 +1,4 @@
-import { StockQuantity } from "../value-object/stock";
+import { StockQuantity } from "../types/stock";
 
 export class Stock {
   constructor(
