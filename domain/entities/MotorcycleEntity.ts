@@ -4,7 +4,7 @@ import { Mileage } from "../types/mileage";
 import { MotorcycleType } from "../types/motorcycle-type";
 import { VIN } from "../types/vehicule-indenfication-number";
 
-export class Motorcycle {
+export class MotorcycleEntity {
   constructor(
     public id: string,
     public vin: VIN,
@@ -18,4 +18,32 @@ export class Motorcycle {
     public transmission: string,
     public fuelTankCapacityInLiters: fuelCapacity
   ) {}
+
+  public static create(
+    vin: VIN,
+    model: string,
+    year: number,
+    status: string,
+    mileageInKilometers: Mileage,
+    motorcycleType: MotorcycleType,
+    power: number,
+    fuelType: fuelType,
+    transmission: string,
+    fuelTankCapacityInLiters: fuelCapacity
+  ): MotorcycleEntity {
+    const id = crypto.randomUUID();
+    return new MotorcycleEntity(
+      id,
+      vin,
+      model,
+      year,
+      status,
+      mileageInKilometers,
+      motorcycleType,
+      power,
+      fuelType,
+      transmission,
+      fuelTankCapacityInLiters
+    );
+  }
 }
