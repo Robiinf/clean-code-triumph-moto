@@ -1,12 +1,12 @@
-export type fuelCapacity = number & { _brand: "fuelCapacity" };
+import { CapacityNegative } from "../errors/CapacityNegativ";
 
-export const createFuelCapacity = (fuelCapacity: number): fuelCapacity => {
-  if (fuelCapacity < 0) {
-    throw new Error("Fuel capacity must be a positive number");
+export class FuelCapacity {
+  private constructor(public readonly value: number) {}
+
+  public static from(capacity: number) {
+    if (capacity < 0) {
+      return new CapacityNegative();
+    }
+    return new FuelCapacity(capacity);
   }
-  return fuelCapacity as fuelCapacity;
-};
-
-export const verifyFuelCapacity = (fuelCapacity: number): boolean => {
-  return fuelCapacity >= 0;
-};
+}

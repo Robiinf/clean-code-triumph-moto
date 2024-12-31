@@ -1,12 +1,12 @@
-export type Mileage = number & { _brand: "mileage" };
+import { NegativeMileage } from "../errors/NegativeMileage";
 
-export const createMileage = (mileage: number): Mileage => {
-  if (mileage < 0) {
-    throw new Error("Mileage must be a positive number");
+export class Mileage {
+  private constructor(public readonly value: number) {}
+
+  public static from(value: number) {
+    if (value < 0) {
+      return new NegativeMileage();
+    }
+    return new Mileage(value);
   }
-  return mileage as Mileage;
-};
-
-export const verifyMileage = (mileage: number): boolean => {
-  return mileage >= 0;
-};
+}

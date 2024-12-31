@@ -1,4 +1,4 @@
-import { fuelCapacity } from "../types/fuel-capacity";
+import { FuelCapacity } from "../types/fuel-capacity";
 import { fuelType } from "../types/fuel-type";
 import { Mileage } from "../types/mileage";
 import { MotorcycleType } from "../types/motorcycle-type";
@@ -16,7 +16,7 @@ export class MotorcycleEntity {
     public power: number,
     public fuelType: fuelType,
     public transmission: string,
-    public fuelTankCapacityInLiters: fuelCapacity
+    public fuelTankCapacityInLiters: FuelCapacity
   ) {}
 
   public static create(
@@ -29,7 +29,7 @@ export class MotorcycleEntity {
     power: number,
     fuelType: fuelType,
     transmission: string,
-    fuelTankCapacityInLiters: fuelCapacity
+    fuelTankCapacityInLiters: FuelCapacity
   ): MotorcycleEntity {
     const id = crypto.randomUUID();
     return new MotorcycleEntity(

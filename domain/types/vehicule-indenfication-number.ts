@@ -1,12 +1,12 @@
-export type VIN = string & { _brand: "VIN" };
+import { InvalidVehiculeIdentificationNumber } from "../errors/InvalidVehiculeIdentificationNumber";
 
-export const createVIN = (vin: string): VIN => {
-  if (vin.length !== 17) {
-    throw new Error("VIN must be 17 characters long");
+export class VIN {
+  private constructor(public readonly value: string) {}
+
+  public static from(value: string) {
+    if (value.length !== 17) {
+      return new InvalidVehiculeIdentificationNumber();
+    }
+    return new VIN(value);
   }
-  return vin as VIN;
-};
-
-export const verifyVIN = (vin: string): boolean => {
-  return vin.length === 17;
-};
+}
