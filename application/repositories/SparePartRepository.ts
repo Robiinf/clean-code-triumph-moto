@@ -1,6 +1,6 @@
-import { SparePart } from "../../domain/entities/SparePart";
+import { SparePartEntity } from "../../domain/entities/SparePartEntity";
 
 export interface SparePartRepository {
-  createSparePart(sparePart: SparePart): Promise<SparePart>;
-  editSparePart(sparePart: SparePart): Promise<SparePart>;
+  createSparePart(sparePart: SparePartEntity): Promise<SparePartEntity>;
+  editSparePart(sparePart: SparePartEntity): Promise<SparePartEntity>;
 }

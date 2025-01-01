@@ -1,10 +1,10 @@
-import { Maintenance } from "../../domain/entities/Maintenance";
+import { MaintenanceEntity } from "../../domain/entities/MaintenanceEntity";
 
 export interface MaintenanceRepository {
-  createMaintenance(maintenance: Maintenance): Promise<Maintenance>;
-  editMaintenance(maintenance: Maintenance): Promise<Maintenance>;
+  createMaintenance(maintenance: MaintenanceEntity): Promise<MaintenanceEntity>;
+  editMaintenance(maintenance: MaintenanceEntity): Promise<MaintenanceEntity>;
   addRecommendation(
-    maintenance: Maintenance,
+    maintenance: MaintenanceEntity,
     recommendation: string
-  ): Promise<Maintenance>;
+  ): Promise<MaintenanceEntity>;
 }

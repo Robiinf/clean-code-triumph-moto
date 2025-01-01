@@ -1,3 +1,3 @@
-import { SparePart } from "../entities/SparePart";
+import { SparePartEntity } from "../entities/SparePartEntity";
 
-export type ReplacedPart = SparePart & { quantity: number };
+export type ReplacedPart = SparePartEntity & { quantity: number };

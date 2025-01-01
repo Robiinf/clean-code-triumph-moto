@@ -1,8 +1,9 @@
-import { Motorcycle } from "../../domain/entities/Motorcycle";
+import { MotorcycleEntity } from "../../domain/entities/MotorcycleEntity";
+import { Mileage } from "../../domain/types/mileage";
 
 export interface MotorcycleRepository {
-  registerMotorcycle(motorcycle: Motorcycle): Promise<Motorcycle>;
-  findMotorcycleById(id: string): Promise<Motorcycle | null>;
-  findMotocycleByVIN(vin: string): Promise<Motorcycle | null>;
-  updateMileage(id: string, mileage: number): Promise<Motorcycle | null>;
+  save(motorcycle: MotorcycleEntity): Promise<MotorcycleEntity>;
+  findMotorcycleById(id: string): Promise<MotorcycleEntity | null>;
+  findMotocycleByVIN(vin: string): Promise<MotorcycleEntity | null>;
+  updateMileage(id: string, mileage: Mileage): Promise<MotorcycleEntity | null>;
 }
