@@ -1,6 +1,6 @@
 import { BreakdownRepository } from "../../repositories/BreakdownRepository";
 
-export class ListBreakdownByVehicule {
+export class ListBreakdownByVehicle {
   constructor(private readonly breakdownRepository: BreakdownRepository) {}
 
   async execute(vehicleId: string) {

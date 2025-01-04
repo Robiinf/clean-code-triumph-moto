@@ -1,6 +1,6 @@
 import { WarrantyRepository } from "../../repositories/WarrantyRepository";
 
-export class ListWarrantiesByVehicule {
+export class ListWarrantiesByVehicle {
   constructor(private warrantyRepository: WarrantyRepository) {}
 
   async execute(vehicleId: string) {

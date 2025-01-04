@@ -6,4 +6,5 @@ export interface MotorcycleRepository {
   findMotorcycleById(id: string): Promise<MotorcycleEntity | null>;
   findMotocycleByVIN(vin: string): Promise<MotorcycleEntity | null>;
   updateMileage(id: string, mileage: Mileage): Promise<MotorcycleEntity | null>;
+  findById(id: string): Promise<MotorcycleEntity | null>;
 }
