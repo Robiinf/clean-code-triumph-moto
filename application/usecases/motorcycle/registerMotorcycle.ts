@@ -3,7 +3,7 @@ import { FuelCapacity } from "../../../domain/types/fuel-capacity";
 import { fuelType } from "../../../domain/types/fuel-type";
 import { Mileage } from "../../../domain/types/mileage";
 import { MotorcycleType } from "../../../domain/types/motorcycle-type";
-import { VIN } from "../../../domain/types/vehicule-indenfication-number";
+import { VIN } from "../../../domain/types/vehicle-indenfication-number";
 import { MotorcycleRepository } from "../../repositories/MotorcycleRepository";
 
 export class RegisterMotorcycle {

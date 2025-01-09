@@ -2,7 +2,7 @@ import { FuelCapacity } from "../types/fuel-capacity";
 import { fuelType } from "../types/fuel-type";
 import { Mileage } from "../types/mileage";
 import { MotorcycleType } from "../types/motorcycle-type";
-import { VIN } from "../types/vehicule-indenfication-number";
+import { VIN } from "../types/vehicle-indenfication-number";
 
 export class MotorcycleEntity {
   constructor(
