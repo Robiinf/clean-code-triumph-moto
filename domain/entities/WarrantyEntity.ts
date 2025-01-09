@@ -1,4 +1,4 @@
-import { InvalidDateImpossible } from "../errors/InvalidDateImpossible";
+import { WarrantyInvalidDate } from "../errors/WarrantyInvalidDate";
 
 export class WarrantyEntity {
   private constructor(
@@ -19,7 +19,7 @@ export class WarrantyEntity {
     const id = crypto.randomUUID();
 
     if (startDate > endDate) {
-      return new InvalidDateImpossible();
+      return new WarrantyInvalidDate();
     }
 
     const warrantyStatus = "active";
