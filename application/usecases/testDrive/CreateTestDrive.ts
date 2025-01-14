@@ -1,5 +1,6 @@
 import { TestDriveRepository } from "../../repositories/TestDriveRepository";
 import { MotorcycleRepository } from "../../repositories/MotorcycleRepository";
+import { DriverRepository } from "../../repositories/DriverRepository";
 import { TestDriveEntity } from "../../../domain/entities/TestDriveEntity";
 import { VehicleNotFound } from "../../../domain/errors/VehicleNotFound";
 import { DriverNotFound } from "../../../domain/errors/DriverNotFound";
@@ -7,7 +8,8 @@ import { DriverNotFound } from "../../../domain/errors/DriverNotFound";
 export class CreateTestDrive {
   constructor(
     private testDriveRepository: TestDriveRepository,
-    private motorcycleRepository: MotorcycleRepository
+    private motorcycleRepository: MotorcycleRepository,
+    private driverRepository: DriverRepository
   ) {}
 
   public async execute(
@@ -21,7 +23,7 @@ export class CreateTestDrive {
       return new VehicleNotFound();
     }
 
-    const driver = await this.motorcycleRepository.findById(driverId);
+    const driver = await this.driverRepository.findById(driverId);
     if (!driver) {
       return new DriverNotFound();
     }

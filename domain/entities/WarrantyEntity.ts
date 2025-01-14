@@ -7,14 +7,16 @@ export class WarrantyEntity {
     public endDate: Date,
     public warrantyType: string,
     public warrantyStatus: string,
-    public motorcyleId: string
+    public motorcyleId: string,
+    public warrantyDescription: string
   ) {}
 
   public static create(
     startDate: Date,
     endDate: Date,
     warrantyType: string,
-    motorcyleId: string
+    motorcyleId: string,
+    warrantyDescription: string
   ) {
     const id = crypto.randomUUID();
 
@@ -30,7 +32,8 @@ export class WarrantyEntity {
       endDate,
       warrantyType,
       warrantyStatus,
-      motorcyleId
+      motorcyleId,
+      warrantyDescription
     );
   }
 }
