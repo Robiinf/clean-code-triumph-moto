@@ -1,4 +1,5 @@
 import type { DriverRepository } from "../../repositories/DriverRepository";
+import { DriverNotFound } from "../../../domain/errors/DriverNotFound";
 
 export class EditDriver {
   public constructor(private readonly driverRepository: DriverRepository) {}
@@ -16,7 +17,7 @@ export class EditDriver {
     const driver = await this.driverRepository.findById(id);
 
     if (!driver) {
-      throw new Error("Driver not found");
+      return new DriverNotFound();
     }
 
     driver.firstName = firstName;

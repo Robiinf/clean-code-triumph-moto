@@ -1,8 +1,13 @@
 import type { DriverRepository } from "../../repositories/DriverRepository";
 import { DriverEntity } from "../../../domain/entities/DriverEntity";
+import { CompanyRepository } from "../../repositories/CompanyRepository";
+import { CompanyNotFound } from "../../../domain/errors/CompanyNotFound";
 
 export class AddDriver {
-  public constructor(private readonly driverRepository: DriverRepository) {}
+  public constructor(
+    private readonly driverRepository: DriverRepository,
+    private readonly companyRepository: CompanyRepository
+  ) {}
 
   public async execute(
     firstName: string,
@@ -13,6 +18,11 @@ export class AddDriver {
     companyId: string,
     driverLicenseId: string
   ) {
+    const company = await this.companyRepository.findById(companyId);
+    if (!company) {
+      return new CompanyNotFound();
+    }
+
     const driver = DriverEntity.create(
       firstName,
       lastName,
