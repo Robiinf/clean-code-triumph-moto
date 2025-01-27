@@ -4,6 +4,9 @@ import { DriverRepository } from "../../repositories/DriverRepository";
 import { VehicleNotFound } from "../../../domain/errors/VehicleNotFound";
 import { DriverNotFound } from "../../../domain/errors/DriverNotFound";
 import { RentalEntity } from "../../../domain/entities/RentalEntity";
+import { InvalidRentalDate } from "../../../domain/errors/InvalidRentalDate";
+import { NegativeDailyRateError } from "../../../domain/errors/NegativeDailyRateError";
+import { InvalidRentalReturnDate } from "../../../domain/errors/InvalidRentalReturnDate";
 
 export class CreateRentalReport {
   constructor(
@@ -30,6 +33,18 @@ export class CreateRentalReport {
       return new DriverNotFound();
     }
 
+    if (rentalStartDate > rentalEndDate) {
+      return new InvalidRentalDate();
+    }
+
+    if (dailyRate <= 0) {
+      return new NegativeDailyRateError();
+    }
+
+    if (returnDate && returnDate < rentalStartDate) {
+      return new InvalidRentalReturnDate();
+    }
+
     const rental = RentalEntity.create(
       motorcycleId,
       driverId,
@@ -38,10 +53,6 @@ export class CreateRentalReport {
       dailyRate,
       returnDate
     );
-
-    if (rental instanceof Error) {
-      return rental;
-    }
 
     await this.rentalRepository.save(rental);
   }

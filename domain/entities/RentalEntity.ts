@@ -36,20 +36,8 @@ export class RentalEntity {
     rentalEndDate: Date,
     dailyRate: number,
     returnDate: Date | null
-  ) {
+  ): RentalEntity {
     const id = crypto.randomUUID();
-
-    if (rentalStartDate > rentalEndDate) {
-      return new InvalidRentalDate();
-    }
-
-    if (dailyRate <= 0) {
-      return new NegativeDailyRateError();
-    }
-
-    if (returnDate && returnDate < rentalStartDate) {
-      return new InvalidRentalReturnDate();
-    }
 
     const rentalStatus = calculateRentalStatus(rentalEndDate, returnDate);
 

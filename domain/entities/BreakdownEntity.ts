@@ -1,5 +1,3 @@
-import { BreakdownFutureDateNotAllowed } from "../errors/BreakdownFutureDateNotAllowed";
-
 export class BreakdownEntity {
   private constructor(
     public id: string,
@@ -14,13 +12,8 @@ export class BreakdownEntity {
     breakdownType: string,
     breakdownDescription: string,
     motorcycleId: string
-  ) {
+  ): BreakdownEntity {
     const id = crypto.randomUUID();
-
-    if (breakdownDate > new Date()) {
-      return new BreakdownFutureDateNotAllowed();
-    }
-
     return new BreakdownEntity(
       id,
       breakdownDate,

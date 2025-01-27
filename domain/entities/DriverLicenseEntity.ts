@@ -16,7 +16,7 @@ export class DriverLicenseEntity {
     expirationDate: Date,
     status: string,
     categories: LicenseCategory[]
-  ) {
+  ): DriverLicenseEntity {
     const id = crypto.randomUUID();
     return new DriverLicenseEntity(
       id,

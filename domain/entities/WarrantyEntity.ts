@@ -17,12 +17,8 @@ export class WarrantyEntity {
     warrantyType: string,
     motorcyleId: string,
     warrantyDescription: string
-  ) {
+  ): WarrantyEntity {
     const id = crypto.randomUUID();
-
-    if (startDate > endDate) {
-      return new WarrantyInvalidDate();
-    }
 
     const warrantyStatus = "active";
 

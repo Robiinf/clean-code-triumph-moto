@@ -2,6 +2,7 @@ import { BreakdownRepository } from "../../repositories/BreakdownRepository";
 import { BreakdownEntity } from "../../../domain/entities/BreakdownEntity";
 import { MotorcycleRepository } from "../../repositories/MotorcycleRepository";
 import { VehicleNotFound } from "../../../domain/errors/VehicleNotFound";
+import { BreakdownFutureDateNotAllowed } from "../../../domain/errors/BreakdownFutureDateNotAllowed";
 
 export class CreateBreakdownReport {
   constructor(
@@ -20,16 +21,16 @@ export class CreateBreakdownReport {
       return new VehicleNotFound();
     }
 
+    if (breakdownDate > new Date()) {
+      return new BreakdownFutureDateNotAllowed();
+    }
+
     const breakdown = BreakdownEntity.create(
       breakdownDate,
       breakdownType,
       breakdownDescription,
       motorcycleId
     );
-
-    if (breakdown instanceof Error) {
-      return breakdown;
-    }
 
     await this.breakdownRepository.save(breakdown);
   }

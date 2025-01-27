@@ -1,5 +1,6 @@
 import type { DriverLicenseRepository } from "../../repositories/DriverLicenseRepository";
 import { LicenseCategory } from "../../../domain/types/LicenseCategory";
+import { DriverLicenseNotFoundError } from "../../../domain/errors/DriverLicenseNotFoundError";
 
 export class EditDriverLicense {
   public constructor(
@@ -17,7 +18,7 @@ export class EditDriverLicense {
     );
 
     if (!driverLicense) {
-      return new Error("DriverLicenseNotFound");
+      return new DriverLicenseNotFoundError();
     }
 
     const licenseCategories = LicenseCategory.from(categories);

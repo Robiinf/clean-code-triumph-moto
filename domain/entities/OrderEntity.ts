@@ -1,7 +1,3 @@
-import { NegativeOrderQuantityError } from "../errors/NegativeOrderQuantityError";
-import { NegativeUnitPriceError } from "../errors/NegativeUnitPriceError";
-import { DeliveryDateBeforeOrderDateError } from "../errors/DeliveryDateBeforeOrderDateError";
-
 export class OrderEntity {
   constructor(
     public id: string,
@@ -19,26 +15,9 @@ export class OrderEntity {
     quantity: number,
     unitPrice: number,
     deliveryDate?: Date
-  ):
-    | OrderEntity
-    | NegativeOrderQuantityError
-    | NegativeUnitPriceError
-    | DeliveryDateBeforeOrderDateError {
+  ): OrderEntity {
     const id = crypto.randomUUID();
     const orderStatus = "PENDING";
-
-    if (deliveryDate && deliveryDate < orderDate) {
-      return new DeliveryDateBeforeOrderDateError();
-    }
-
-    if (quantity <= 0) {
-      return new NegativeOrderQuantityError();
-    }
-
-    if (unitPrice <= 0) {
-      return new NegativeUnitPriceError();
-    }
-
     return new OrderEntity(
       id,
       orderDate,

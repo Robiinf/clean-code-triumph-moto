@@ -1,6 +1,7 @@
 import type { CompanyRepository } from "../../repositories/CompanyRepository";
 import { CompanyName } from "../../../domain/types/CompanyName";
 import { CompanySiret } from "../../../domain/types/CompanySiret";
+import { CompanyNotFound } from "../../../domain/errors/CompanyNotFound";
 
 export class EditCompany {
   public constructor(private readonly companyRepository: CompanyRepository) {}
@@ -18,7 +19,7 @@ export class EditCompany {
     const company = await this.companyRepository.findById(companyId);
 
     if (!company) {
-      return new Error("CompanyNotFound");
+      return new CompanyNotFound();
     }
 
     const companyName = CompanyName.from(name);
