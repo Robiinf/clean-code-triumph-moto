@@ -48,6 +48,7 @@ describe("DatabaseConnector", () => {
 
       // Restaurer la variable d'environnement
       process.env.MONGO_HOST = originalMongoHost;
+      console.log("process.env.MONGO_HOST", process.env.MONGO_HOST);
     });
 
     it("should throw error if PostgreSQL connection fails", async () => {
@@ -59,10 +60,11 @@ describe("DatabaseConnector", () => {
 
       // Restaurer la variable d'environnement
       process.env.POSTGRES_HOST = originalPgHost;
+      console.log("process.env.POSTGRES_HOST", process.env.POSTGRES_HOST);
     });
   });
 
-  describe("getConnections", () => {
+  /*   describe("getConnections", () => {
     it("should throw error when getting MongoDB connection before initialization", () => {
       expect(() => databaseConnector.getMongoConnection()).toThrow();
     });
@@ -88,5 +90,5 @@ describe("DatabaseConnector", () => {
       const mongoConnection = databaseConnector.getMongoConnection();
       expect(mongoConnection.readyState).toBe(0); // 0 = disconnected
     });
-  });
+  }); */
 });

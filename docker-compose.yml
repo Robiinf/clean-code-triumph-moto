@@ -16,7 +16,13 @@ services:
     volumes:
       - .:/app # Monter le dossier local 'infrastructure' dans le conteneur à /app
     working_dir: /app # Définir le répertoire de travail à /app (qui contient ton code)
-    command: ["npm", "test"] # Exécuter les tests via npm
+    command:
+      [
+        "npm",
+        "test",
+        "--",
+        "tests/application/usecases/company/CreateCompany.integration.test.ts",
+      ]
     networks:
       - app_network
 

@@ -5,7 +5,7 @@ export class CompanySiret {
 
   public static from(siret: string) {
     if (!CompanySiret.isValid(siret)) {
-      throw new InvalidSiretError();
+      return new InvalidSiretError();
     }
     return new CompanySiret(siret);
   }

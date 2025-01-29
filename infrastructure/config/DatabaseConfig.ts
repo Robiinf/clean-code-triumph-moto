@@ -36,7 +36,7 @@ requiredEnvVars.forEach((envVar) => {
   }
 });
 
-export const databaseConfig: DatabaseConfig = {
+/* export const databaseConfig: DatabaseConfig = {
   postgres: {
     host: process.env.POSTGRES_HOST || "postgres",
     port: parseInt(process.env.POSTGRES_PORT || "5432"),
@@ -50,7 +50,23 @@ export const databaseConfig: DatabaseConfig = {
     username: process.env.MONGO_INITDB_ROOT_USERNAME!,
     password: process.env.MONGO_INITDB_ROOT_PASSWORD!,
   },
-};
+}; */
+
+export const getDatabaseConfig = (): DatabaseConfig => ({
+  postgres: {
+    host: process.env.POSTGRES_HOST || "postgres",
+    port: parseInt(process.env.POSTGRES_PORT || "5432"),
+    username: process.env.POSTGRES_USER!,
+    password: process.env.POSTGRES_PASSWORD!,
+    database: process.env.POSTGRES_DB!,
+  },
+  mongodb: {
+    host: process.env.MONGO_HOST || "mongodb",
+    port: parseInt(process.env.MONGO_PORT || "27017"),
+    username: process.env.MONGO_INITDB_ROOT_USERNAME!,
+    password: process.env.MONGO_INITDB_ROOT_PASSWORD!,
+  },
+});
 
 export class DatabaseConnector {
   private static instance: DatabaseConnector;
@@ -68,18 +84,14 @@ export class DatabaseConnector {
   }
 
   public async initialize(): Promise<void> {
+    const databaseConfig = getDatabaseConfig();
     try {
       const mongoUrl = `mongodb://${databaseConfig.mongodb.username}:${databaseConfig.mongodb.password}@${databaseConfig.mongodb.host}:${databaseConfig.mongodb.port}`;
 
       this.mongoConnection = await mongoose.createConnection(mongoUrl, {
         authSource: "admin",
+        connectTimeoutMS: 2000,
       });
-
-      console.log(
-        "databaseConfig.mongodb.host CURRENTLY USED FOR SURE",
-        databaseConfig.mongodb.host
-      );
-      console.log("process.env.MONGO_HOST MAYBE USED", process.env.MONGO_HOST);
 
       this.sequelizeConnection = new Sequelize({
         dialect: "postgres",
@@ -94,6 +106,9 @@ export class DatabaseConnector {
           min: 0,
           idle: 10000,
           acquire: 5000,
+        },
+        dialectOptions: {
+          connectTimeout: 2000,
         },
       });
 
