@@ -59,7 +59,8 @@ export class MongoCompanyRepository implements CompanyRepository {
         country: company.country,
         createdAt: company.createdAt,
         updatedAt: company.updatedAt,
-        drivers: [],
+        // Gérer les drivers indépendamment
+        //drivers: [],
       },
       { upsert: true, new: true }
     );

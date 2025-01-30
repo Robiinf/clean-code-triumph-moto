@@ -1,10 +1,33 @@
 services:
-  test:
-    image: node:18 # Image Docker de Node.js
-    container_name: test
-    build:
-      context: .
-      dockerfile: Dockerfile.test # Spécifie le Dockerfile pour ce service
+  # test:
+  #   image: node:18 # Image Docker de Node.js
+  #   container_name: test
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.test # Spécifie le Dockerfile pour ce service
+  #   depends_on:
+  #     - postgres
+  #     - mongodb
+  #   environment:
+  #     POSTGRES_HOST: postgres
+  #     POSTGRES_PORT: 5432
+  #     MONGO_HOST: mongodb
+  #     MONGO_PORT: 27017
+  #   volumes:
+  #     - .:/app # Monter le dossier local 'infrastructure' dans le conteneur à /app
+  #   working_dir: /app # Définir le répertoire de travail à /app (qui contient ton code)
+  #   command:
+  #     [
+  #       "npm",
+  #       "test",
+  #       "--",
+  #       "tests/application/usecases/company/CreateCompany.integration.test.ts",
+  #     ]
+  #   networks:
+  #     - app_network
+  dev:
+    image: node:18
+    container_name: dev
     depends_on:
       - postgres
       - mongodb
@@ -14,15 +37,12 @@ services:
       MONGO_HOST: mongodb
       MONGO_PORT: 27017
     volumes:
-      - .:/app # Monter le dossier local 'infrastructure' dans le conteneur à /app
-    working_dir: /app # Définir le répertoire de travail à /app (qui contient ton code)
-    command:
-      [
-        "npm",
-        "test",
-        "--",
-        "tests/application/usecases/company/CreateCompany.integration.test.ts",
-      ]
+      - .:/app
+    working_dir: /app
+    # Installation des dépendances au démarrage
+    command: >
+      sh -c "npm install &&
+             tail -f /dev/null"
     networks:
       - app_network
 
