@@ -1,4 +1,5 @@
 import { MongoCompanyRepository } from "../mongoose/repositories/MongoCompanyRepository";
+import { MongoDriverRepository } from "../mongoose/repositories/MongoDriverRepository";
 import { DatabaseConnector } from "./DatabaseConfig";
 
 export class RepositoryFactory {
@@ -40,6 +41,11 @@ export class RepositoryFactory {
     switch (entityName) {
       case "CompanyEntity":
         repository = new MongoCompanyRepository(
+          this.databaseConnector.getMongoConnection()
+        );
+        break;
+      case "DriverEntity":
+        repository = new MongoDriverRepository(
           this.databaseConnector.getMongoConnection()
         );
         break;

@@ -12,7 +12,7 @@ export class EditDriver {
     email: string,
     birthDate: Date,
     companyId: string,
-    driverLicenseId: string
+    driverLicenseId?: string
   ) {
     const driver = await this.driverRepository.findById(id);
 
@@ -20,14 +20,16 @@ export class EditDriver {
       return new DriverNotFound();
     }
 
-    driver.firstName = firstName;
-    driver.lastName = lastName;
-    driver.phone = phone;
-    driver.email = email;
-    driver.birthDate = birthDate;
-    driver.companyId = companyId;
-    driver.driverLicenseId = driverLicenseId;
+    const updatedDriver = driver.update(
+      firstName,
+      lastName,
+      phone,
+      email,
+      birthDate,
+      companyId,
+      driverLicenseId
+    );
 
-    await this.driverRepository.save(driver);
+    await this.driverRepository.save(updatedDriver);
   }
 }

@@ -28,7 +28,7 @@ const DriverSchema = new Schema({
   birthDate: { type: Date, required: true },
   createdAt: { type: Date, required: true },
   updatedAt: { type: Date, required: true },
-  driverLicense: { type: DriverLicenseSchema, required: true },
+  driverLicense: { type: DriverLicenseSchema, required: false },
   incidents: [IncidentSchema],
 });
 

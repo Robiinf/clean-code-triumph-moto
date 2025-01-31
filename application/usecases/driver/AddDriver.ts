@@ -16,7 +16,7 @@ export class AddDriver {
     email: string,
     birthDate: Date,
     companyId: string,
-    driverLicenseId: string
+    driverLicenseId?: string
   ) {
     const company = await this.companyRepository.findById(companyId);
     if (!company) {
