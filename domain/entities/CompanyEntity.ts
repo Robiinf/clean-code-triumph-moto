@@ -67,4 +67,27 @@ export class CompanyEntity {
       updatedAt
     );
   }
+
+  public update(
+    name: CompanyName,
+    siret: CompanySiret,
+    phone: string,
+    address: string,
+    city: string,
+    postalCode: string,
+    country: string
+  ): CompanyEntity {
+    return CompanyEntity.restore(
+      this.id,
+      name,
+      siret,
+      phone,
+      address,
+      city,
+      postalCode,
+      country,
+      this.createdAt,
+      new Date()
+    );
+  }
 }

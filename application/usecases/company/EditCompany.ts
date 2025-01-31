@@ -31,14 +31,16 @@ export class EditCompany {
       return companySiret;
     }
 
-    company.name = companyName;
-    company.siret = companySiret;
-    company.phone = phone;
-    company.address = address;
-    company.city = city;
-    company.postalCode = postalCode;
-    company.country = country;
+    const updatedCompany = company.update(
+      companyName,
+      companySiret,
+      phone,
+      address,
+      city,
+      postalCode,
+      country
+    );
 
-    await this.companyRepository.save(company);
+    await this.companyRepository.save(updatedCompany);
   }
 }
