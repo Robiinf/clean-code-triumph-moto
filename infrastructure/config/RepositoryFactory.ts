@@ -1,5 +1,6 @@
 import { MongoCompanyRepository } from "../mongoose/repositories/MongoCompanyRepository";
 import { MongoDriverRepository } from "../mongoose/repositories/MongoDriverRepository";
+import { MongoDriverLicenseRepository } from "../mongoose/repositories/MongoDriverLicenseRepository";
 import { DatabaseConnector } from "./DatabaseConfig";
 
 export class RepositoryFactory {
@@ -46,6 +47,11 @@ export class RepositoryFactory {
         break;
       case "DriverEntity":
         repository = new MongoDriverRepository(
+          this.databaseConnector.getMongoConnection()
+        );
+        break;
+      case "DriverLicenseEntity":
+        repository = new MongoDriverLicenseRepository(
           this.databaseConnector.getMongoConnection()
         );
         break;

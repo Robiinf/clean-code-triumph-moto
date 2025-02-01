@@ -19,7 +19,7 @@ export class MongoDriverRepository implements DriverRepository {
       await this.companyModel.updateOne(
         {
           id: driver.companyId,
-          "drivers.id": driver.id, // On cherche le driver par son ID
+          "drivers.id": driver.id,
         },
         {
           $set: {
@@ -32,7 +32,9 @@ export class MongoDriverRepository implements DriverRepository {
               birthDate: driver.birthDate,
               createdAt: driver.createdAt,
               updatedAt: driver.updatedAt,
-              driverLicenseId: driver.driverLicenseId,
+              driverLicense: driver.driverLicenseId
+                ? { id: driver.driverLicenseId }
+                : null,
             },
           },
         }
@@ -52,7 +54,9 @@ export class MongoDriverRepository implements DriverRepository {
               birthDate: driver.birthDate,
               createdAt: driver.createdAt,
               updatedAt: driver.updatedAt,
-              driverLicenseId: driver.driverLicenseId,
+              driverLicense: driver.driverLicenseId
+                ? { id: driver.driverLicenseId }
+                : null,
             },
           },
         }
@@ -72,8 +76,9 @@ export class MongoDriverRepository implements DriverRepository {
 
     const driver = company.drivers[0];
 
+    const driverLicenseId = driver.driverLicense?.id || null;
     // Utiliser restore au lieu de create pour garder l'ID original
-    return DriverEntity.restore(
+    const restoredDriver = DriverEntity.restore(
       driver.id,
       driver.firstName,
       driver.lastName,
@@ -81,10 +86,12 @@ export class MongoDriverRepository implements DriverRepository {
       driver.email,
       driver.birthDate,
       company.id,
-      driver.driverLicenseId,
+      driverLicenseId,
       driver.createdAt,
       driver.updatedAt
     );
+
+    return restoredDriver;
   }
 
   async findByCompany(companyId: string): Promise<DriverEntity[]> {
@@ -121,6 +128,32 @@ export class MongoDriverRepository implements DriverRepository {
           drivers: { id: id },
         },
       }
+    );
+  }
+
+  async findByDriverLicenseId(licenseId: string): Promise<DriverEntity | null> {
+    // On cherche un driver qui a ce driverLicenseId
+    const company = await this.companyModel.findOne(
+      { "drivers.driverLicenseId": licenseId },
+      { "drivers.$": 1, id: 1 } // On récupère seulement le driver correspondant et l'id de la company
+    );
+
+    if (!company || !company.drivers || !company.drivers.length) {
+      return null;
+    }
+
+    const driver = company.drivers[0];
+    return DriverEntity.restore(
+      driver.id,
+      driver.firstName,
+      driver.lastName,
+      driver.phone,
+      driver.email,
+      driver.birthDate,
+      company.id,
+      driver.driverLicenseId,
+      driver.createdAt,
+      driver.updatedAt
     );
   }
 }

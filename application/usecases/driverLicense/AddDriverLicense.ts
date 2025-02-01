@@ -1,11 +1,14 @@
 import { DriverLicenseEntity } from "../../../domain/entities/DriverLicenseEntity";
 import type { DriverLicenseRepository } from "../../repositories/DriverLicenseRepository";
+import type { DriverRepository } from "../../repositories/DriverRepository";
 import { LicenseCategory } from "../../../domain/types/LicenseCategory";
 import { InvalidLicenseDate } from "../../../domain/errors/InvalidLicenseDate";
+import { DriverNotFound } from "../../../domain/errors/DriverNotFound";
 
-export class CreateDriverLicense {
+export class AddDriverLicense {
   public constructor(
-    private readonly driverLicenseRepository: DriverLicenseRepository
+    private readonly driverLicenseRepository: DriverLicenseRepository,
+    private readonly driverRepository: DriverRepository
   ) {}
 
   public async execute(
@@ -13,8 +16,14 @@ export class CreateDriverLicense {
     issueDate: Date,
     expirationDate: Date,
     status: string,
-    categories: string[]
+    categories: string[],
+    driverId: string
   ) {
+    const driver = await this.driverRepository.findById(driverId);
+    if (!driver) {
+      return new DriverNotFound();
+    }
+
     const licenseCategories = LicenseCategory.from(categories);
     if (licenseCategories instanceof Error) {
       return licenseCategories;
@@ -36,6 +45,18 @@ export class CreateDriverLicense {
       licenseCategories
     );
 
-    await this.driverLicenseRepository.save(driverLicense);
+    // Mettre à jour le driver avec l'ID de la licence
+    const updatedDriver = driver.update(
+      driver.firstName,
+      driver.lastName,
+      driver.phone,
+      driver.email,
+      driver.birthDate,
+      driver.companyId,
+      driverLicense.id
+    );
+
+    await this.driverRepository.save(updatedDriver);
+    await this.driverLicenseRepository.save(driverLicense, driverId);
   }
 }

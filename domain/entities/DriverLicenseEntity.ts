@@ -1,4 +1,5 @@
 import { LicenseCategory } from "../types/LicenseCategory";
+import crypto from "crypto";
 
 export class DriverLicenseEntity {
   private constructor(
@@ -20,6 +21,41 @@ export class DriverLicenseEntity {
     const id = crypto.randomUUID();
     return new DriverLicenseEntity(
       id,
+      licenseNumber,
+      issueDate,
+      expirationDate,
+      status,
+      categories
+    );
+  }
+
+  public static restore(
+    id: string,
+    licenseNumber: string,
+    issueDate: Date,
+    expirationDate: Date,
+    status: string,
+    categories: LicenseCategory[]
+  ): DriverLicenseEntity {
+    return new DriverLicenseEntity(
+      id,
+      licenseNumber,
+      issueDate,
+      expirationDate,
+      status,
+      categories
+    );
+  }
+
+  public update(
+    licenseNumber: string,
+    issueDate: Date,
+    expirationDate: Date,
+    status: string,
+    categories: LicenseCategory[]
+  ): DriverLicenseEntity {
+    return DriverLicenseEntity.restore(
+      this.id,
       licenseNumber,
       issueDate,
       expirationDate,
