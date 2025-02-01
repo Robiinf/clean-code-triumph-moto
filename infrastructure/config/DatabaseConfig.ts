@@ -36,22 +36,6 @@ requiredEnvVars.forEach((envVar) => {
   }
 });
 
-/* export const databaseConfig: DatabaseConfig = {
-  postgres: {
-    host: process.env.POSTGRES_HOST || "postgres",
-    port: parseInt(process.env.POSTGRES_PORT || "5432"),
-    username: process.env.POSTGRES_USER!,
-    password: process.env.POSTGRES_PASSWORD!,
-    database: process.env.POSTGRES_DB!,
-  },
-  mongodb: {
-    host: process.env.MONGO_HOST || "mongodb",
-    port: parseInt(process.env.MONGO_PORT || "27017"),
-    username: process.env.MONGO_INITDB_ROOT_USERNAME!,
-    password: process.env.MONGO_INITDB_ROOT_PASSWORD!,
-  },
-}; */
-
 export const getDatabaseConfig = (): DatabaseConfig => ({
   postgres: {
     host: process.env.POSTGRES_HOST || "postgres",
@@ -113,7 +97,6 @@ export class DatabaseConnector {
       });
 
       await this.testConnections();
-      console.log("Database connections established successfully");
     } catch (error) {
       console.error("Error establishing database connections", error);
       throw new Error(
@@ -129,14 +112,12 @@ export class DatabaseConnector {
         throw new Error("MongoDB connection not established");
       }
       await this.mongoConnection.asPromise();
-      console.log("MongoDB connection established successfully");
 
       // Test PostgreSQL connection
       if (!this.sequelizeConnection) {
         throw new Error("PostgreSQL connection not established");
       }
       await this.sequelizeConnection.authenticate();
-      console.log("PostgreSQL connection established successfully");
     } catch (error) {
       throw new Error(`Failed to test database connections: ${error.message}`);
     }
@@ -146,12 +127,10 @@ export class DatabaseConnector {
     try {
       if (this.mongoConnection) {
         await this.mongoConnection.close();
-        console.log("MongoDB connection closed");
       }
 
       if (this.sequelizeConnection) {
         await this.sequelizeConnection.close();
-        console.log("PostgreSQL connection closed");
       }
     } catch (error) {
       throw new Error(`Failed to close database connections: ${error.message}`);

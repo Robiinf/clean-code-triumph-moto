@@ -2,6 +2,7 @@ import { MongoCompanyRepository } from "../mongoose/repositories/MongoCompanyRep
 import { MongoDriverRepository } from "../mongoose/repositories/MongoDriverRepository";
 import { MongoDriverLicenseRepository } from "../mongoose/repositories/MongoDriverLicenseRepository";
 import { DatabaseConnector } from "./DatabaseConfig";
+import { SequelizeMotorcycleRepository } from "../sequelize/repositories/SequelizeMotorcycleRepository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -55,6 +56,12 @@ export class RepositoryFactory {
           this.databaseConnector.getMongoConnection()
         );
         break;
+      case "IncidentEntity":
+        break;
+      case "MotorcycleEntity":
+        repository = new SequelizeMotorcycleRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
       default:
         throw new Error("Repository not found");
     }

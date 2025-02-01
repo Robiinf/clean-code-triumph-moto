@@ -1,12 +1,12 @@
 import { MotorcycleEntity } from "../../../domain/entities/MotorcycleEntity";
 import { FuelCapacity } from "../../../domain/types/fuel-capacity";
-import { fuelType } from "../../../domain/types/fuel-type";
 import { Mileage } from "../../../domain/types/mileage";
-import { MotorcycleType } from "../../../domain/types/motorcycle-type";
 import { VIN } from "../../../domain/types/vehicle-indenfication-number";
 import { MotorcycleRepository } from "../../repositories/MotorcycleRepository";
+import { FuelType } from "../../../domain/types/fuelType";
+import { MotorcycleType } from "../../../domain/types/motorcycleType";
 
-export class RegisterMotorcycle {
+export class AddMotorcycle {
   constructor(private motorcycleRepository: MotorcycleRepository) {}
 
   async execute(
@@ -15,9 +15,9 @@ export class RegisterMotorcycle {
     year: number,
     status: string,
     mileageInKilometers: number,
-    motorcycleType: MotorcycleType,
+    motorcycleType: string,
     power: number,
-    fuelType: fuelType,
+    fuelType: string,
     transmission: string,
     fuelTankCapacityInLiters: number
   ) {
@@ -38,15 +38,25 @@ export class RegisterMotorcycle {
       return checkedCapacity;
     }
 
+    const checkedMotorcycleType = MotorcycleType.from(motorcycleType);
+    if (checkedMotorcycleType instanceof Error) {
+      return checkedMotorcycleType;
+    }
+
+    const checkedFuelType = FuelType.from(fuelType);
+    if (checkedFuelType instanceof Error) {
+      return checkedFuelType;
+    }
+
     const motorcycle = MotorcycleEntity.create(
       checkedVin,
       model,
       year,
       status,
       checkedMileage,
-      motorcycleType,
+      checkedMotorcycleType,
       power,
-      fuelType,
+      checkedFuelType,
       transmission,
       checkedCapacity
     );

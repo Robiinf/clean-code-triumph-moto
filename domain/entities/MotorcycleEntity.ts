@@ -1,8 +1,9 @@
 import { FuelCapacity } from "../types/fuel-capacity";
-import { fuelType } from "../types/fuel-type";
+import { FuelType } from "../types/fuelType";
 import { Mileage } from "../types/mileage";
-import { MotorcycleType } from "../types/motorcycle-type";
+import { MotorcycleType } from "../types/motorcycleType";
 import { VIN } from "../types/vehicle-indenfication-number";
+import crypto from "crypto";
 
 export class MotorcycleEntity {
   constructor(
@@ -14,7 +15,7 @@ export class MotorcycleEntity {
     public mileageInKilometers: Mileage,
     public motorcycleType: MotorcycleType,
     public power: number,
-    public fuelType: fuelType,
+    public fuelType: FuelType,
     public transmission: string,
     public fuelTankCapacityInLiters: FuelCapacity
   ) {}
@@ -27,7 +28,7 @@ export class MotorcycleEntity {
     mileageInKilometers: Mileage,
     motorcycleType: MotorcycleType,
     power: number,
-    fuelType: fuelType,
+    fuelType: FuelType,
     transmission: string,
     fuelTankCapacityInLiters: FuelCapacity
   ): MotorcycleEntity {
