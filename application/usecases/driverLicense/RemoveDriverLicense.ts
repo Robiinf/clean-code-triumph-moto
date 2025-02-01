@@ -21,7 +21,10 @@ export class RemoveDriverLicense {
       return new DriverNotFound();
     }
 
-    // Supprimer la référence de la licence dans le driver
+    // D'abord supprimer la licence
+    await this.driverLicenseRepository.delete(id);
+
+    // Ensuite mettre à jour le driver
     const updatedDriver = driver.update(
       driver.firstName,
       driver.lastName,
@@ -33,6 +36,5 @@ export class RemoveDriverLicense {
     );
 
     await this.driverRepository.save(updatedDriver);
-    await this.driverLicenseRepository.delete(id);
   }
 }

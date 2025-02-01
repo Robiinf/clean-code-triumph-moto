@@ -8,9 +8,6 @@ export class GetDriverLicense {
 
   public async execute(id: string) {
     const driverLicense = await this.driverLicenseRepository.findById(id);
-    if (!driverLicense) {
-      return new DriverLicenseNotFoundError();
-    }
 
     return driverLicense;
   }

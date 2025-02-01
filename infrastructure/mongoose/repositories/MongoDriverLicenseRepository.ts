@@ -120,14 +120,29 @@ export class MongoDriverLicenseRepository implements DriverLicenseRepository {
   }
 
   async delete(id: string): Promise<void> {
+    // D'abord, faisons une requête plus large pour voir la structure
+    const allCompanies = await this.companyModel.find({});
+
+    // Ensuite tentons de trouver spécifiquement la company avec ce driver
+    const companyWithDriver = await this.companyModel.findOne({
+      drivers: {
+        $elemMatch: {
+          "driverLicense.id": id,
+        },
+      },
+    });
+
     const result = await this.companyModel.updateOne(
-      { "drivers.driverLicense.id": id },
       {
-        $unset: {
-          "drivers.$.driverLicense": 1,
+        "drivers.driverLicense.id": id,
+      },
+      {
+        $set: {
+          "drivers.$.driverLicense": null,
         },
       }
     );
+
 
     if (result.modifiedCount === 0) {
       throw new Error("License not found");
