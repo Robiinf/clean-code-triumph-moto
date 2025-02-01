@@ -134,8 +134,8 @@ export class MongoDriverRepository implements DriverRepository {
   async findByDriverLicenseId(licenseId: string): Promise<DriverEntity | null> {
     // On cherche un driver qui a ce driverLicenseId
     const company = await this.companyModel.findOne(
-      { "drivers.driverLicenseId": licenseId },
-      { "drivers.$": 1, id: 1 } // On récupère seulement le driver correspondant et l'id de la company
+      { "drivers.driverLicense.id": licenseId }, // Changement ici
+      { "drivers.$": 1, id: 1 }
     );
 
     if (!company || !company.drivers || !company.drivers.length) {
@@ -151,7 +151,7 @@ export class MongoDriverRepository implements DriverRepository {
       driver.email,
       driver.birthDate,
       company.id,
-      driver.driverLicenseId,
+      driver.driverLicense?.id, // Changement ici aussi
       driver.createdAt,
       driver.updatedAt
     );
