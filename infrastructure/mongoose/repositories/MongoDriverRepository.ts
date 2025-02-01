@@ -110,7 +110,7 @@ export class MongoDriverRepository implements DriverRepository {
         driver.email,
         driver.birthDate,
         companyId,
-        driver.driverLicenseId,
+        driver.driverLicense?.id || null,
         driver.createdAt,
         driver.updatedAt
       )
