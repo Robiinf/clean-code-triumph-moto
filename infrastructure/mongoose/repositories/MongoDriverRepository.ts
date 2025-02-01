@@ -109,4 +109,18 @@ export class MongoDriverRepository implements DriverRepository {
       )
     );
   }
+
+  // Dans MongoDriverRepository
+  async delete(id: string): Promise<void> {
+    const existingDriver = await this.findById(id);
+    // On utilise $pull pour retirer le driver du tableau drivers
+    const result = await this.companyModel.updateOne(
+      { id: existingDriver.companyId },
+      {
+        $pull: {
+          drivers: { id: id },
+        },
+      }
+    );
+  }
 }
