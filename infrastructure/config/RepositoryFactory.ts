@@ -66,6 +66,7 @@ export class RepositoryFactory {
         repository = new SequelizeMotorcycleRepository(
           this.databaseConnector.getSequelizeConnection()
         );
+        break;
       default:
         throw new Error("Repository not found");
     }
