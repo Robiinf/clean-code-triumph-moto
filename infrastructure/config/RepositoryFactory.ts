@@ -3,6 +3,7 @@ import { MongoDriverRepository } from "../mongoose/repositories/MongoDriverRepos
 import { MongoDriverLicenseRepository } from "../mongoose/repositories/MongoDriverLicenseRepository";
 import { DatabaseConnector } from "./DatabaseConfig";
 import { SequelizeMotorcycleRepository } from "../sequelize/repositories/SequelizeMotorcycleRepository";
+import { MongoIncidentRepository } from "../mongoose/repositories/MongoIncidentRepository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -57,6 +58,9 @@ export class RepositoryFactory {
         );
         break;
       case "IncidentEntity":
+        repository = new MongoIncidentRepository(
+          this.databaseConnector.getMongoConnection()
+        );
         break;
       case "MotorcycleEntity":
         repository = new SequelizeMotorcycleRepository(

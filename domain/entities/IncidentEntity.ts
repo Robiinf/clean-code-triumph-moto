@@ -1,3 +1,4 @@
+import crypto from "crypto";
 export class IncidentEntity {
   private constructor(
     public id: string,
@@ -16,6 +17,37 @@ export class IncidentEntity {
     const id = crypto.randomUUID();
     return new IncidentEntity(
       id,
+      driverId,
+      motorcycleId,
+      incidentDate,
+      incidentDetails
+    );
+  }
+
+  public static restore(
+    id: string,
+    driverId: string,
+    motorcycleId: string,
+    incidentDate: Date,
+    incidentDetails: string
+  ): IncidentEntity {
+    return new IncidentEntity(
+      id,
+      driverId,
+      motorcycleId,
+      incidentDate,
+      incidentDetails
+    );
+  }
+
+  public update(
+    driverId: string,
+    motorcycleId: string,
+    incidentDate: Date,
+    incidentDetails: string
+  ): IncidentEntity {
+    return IncidentEntity.restore(
+      this.id,
       driverId,
       motorcycleId,
       incidentDate,
