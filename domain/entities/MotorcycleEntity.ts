@@ -47,4 +47,31 @@ export class MotorcycleEntity {
       fuelTankCapacityInLiters
     );
   }
+
+  public update(
+    vin: VIN,
+    model: string,
+    year: number,
+    status: string,
+    mileageInKilometers: Mileage,
+    motorcycleType: MotorcycleType,
+    power: number,
+    fuelType: FuelType,
+    transmission: string,
+    fuelTankCapacityInLiters: FuelCapacity
+  ): MotorcycleEntity {
+    return new MotorcycleEntity(
+      this.id, // Garder l'ID original
+      vin,
+      model,
+      year,
+      status,
+      mileageInKilometers,
+      motorcycleType,
+      power,
+      fuelType,
+      transmission,
+      fuelTankCapacityInLiters
+    );
+  }
 }

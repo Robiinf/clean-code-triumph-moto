@@ -31,6 +31,14 @@ export class SequelizeMotorcycleRepository implements MotorcycleRepository {
   }
 
   async findById(id: string): Promise<MotorcycleEntity | null> {
+    // check if the id is a valid UUID otherwise sequelize will throw an error
+    if (
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        id
+      )
+    ) {
+      return null;
+    }
     const motorcycle = await MotorcycleModel.findByPk(id);
     if (!motorcycle) {
       return null;
