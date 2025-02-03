@@ -1,17 +1,16 @@
-// src/infrastructure/http/express/server.ts
-import express from "express";
+// src/infrastructure/http/express/main.ts
+import "reflect-metadata";
+import { ExpressServer } from "./ExpressServer";
 
-const app = express();
-const port = process.env.PORT || 3000;
+async function bootstrap() {
+  const expressServer = new ExpressServer();
+  await expressServer.start(3000);
 
-// Middleware pour parser le JSON
-app.use(express.json());
+  // Gestion de l'arrêt gracieux
+  process.on("SIGTERM", async () => {
+    await expressServer.stop();
+    process.exit(0);
+  });
+}
 
-// Route de test
-app.get("/health", (req, res) => {
-  res.json({ status: "Express server is running" });
-});
-
-app.listen(port, () => {
-  console.log(`Express server running on port ${port}`);
-});
+bootstrap();

@@ -1,34 +1,48 @@
 // src/infrastructure/http/express/ExpressServer.ts
 import express, { Express } from "express";
 import { ServerInterface } from "../ServerInterface";
+import { DatabaseConnector } from "../../config/DatabaseConfig";
+import { companyRoutes } from "./routes/company.routes";
+import { CompanySchema } from "../../mongoose/schemas/CompanySchema";
 
 export class ExpressServer implements ServerInterface {
   private app: Express;
-  private server: any;
+  private databaseConnector: DatabaseConnector;
+
+  constructor() {
+    this.app = express();
+    this.databaseConnector = DatabaseConnector.getInstance();
+  }
 
   async start(port: number): Promise<void> {
-    this.app = express();
-    this.app.use(express.json());
+    try {
+      // Initialiser les connexions DB
+      await this.databaseConnector.initialize();
 
-    // Configuration de base
-    this.app.get("/health", (req, res) => {
-      res.json({ status: "Express server is running" });
-    });
+      // Middleware
+      this.app.use(express.json());
 
-    // Démarrage du serveur
-    this.server = this.app.listen(port, () => {
-      console.log(`Express server running on port ${port}`);
-    });
+      // Routes
+      this.app.use("/api", companyRoutes());
+
+      // health check
+      this.app.get("/health", (req, res) => {
+        res.send("Server is up and running");
+      });
+
+      await new Promise<void>((resolve) => {
+        this.app.listen(port, () => {
+          console.log(`Express server running on port ${port}`);
+          resolve();
+        });
+      });
+    } catch (error) {
+      console.error("Failed to start Express server:", error);
+      throw error;
+    }
   }
 
   async stop(): Promise<void> {
-    if (this.server) {
-      await new Promise((resolve, reject) => {
-        this.server.close((err: Error) => {
-          if (err) reject(err);
-          else resolve(true);
-        });
-      });
-    }
+    await this.databaseConnector.closeConnections();
   }
 }
