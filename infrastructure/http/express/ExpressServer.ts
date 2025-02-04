@@ -5,6 +5,8 @@ import { companyRoutes } from "./routes/company.routes";
 import { driverLicenseRoutes } from "./routes/driverLicense.routes";
 import { driverRoutes } from "./routes/driver.routes";
 import { incidentRoutes } from "./routes/incident.routes";
+import { testDriveRoutes } from "./routes/testDrive.routes";
+import { TestDriveModel } from "../../sequelize/models/TestDriveModel";
 
 export class ExpressServer implements ServerInterface {
   private app: Express;
@@ -18,6 +20,9 @@ export class ExpressServer implements ServerInterface {
   async start(port: number): Promise<void> {
     try {
       await this.databaseConnector.initialize();
+      const sequelize = this.databaseConnector.getSequelizeConnection();
+      await TestDriveModel.initModel(sequelize);
+      await TestDriveModel.sync({ force: false });
 
       this.app.use(express.json());
 
@@ -25,6 +30,7 @@ export class ExpressServer implements ServerInterface {
       this.app.use("/api", driverRoutes());
       this.app.use("/api", driverLicenseRoutes());
       this.app.use("/api", incidentRoutes());
+      this.app.use("/api", testDriveRoutes());
 
       this.app.get("/health", (req, res) => {
         res.send("Server is up and running");
