@@ -5,6 +5,7 @@ import { DatabaseConnector } from "../../config/DatabaseConfig";
 import { companyRoutes } from "./routes/company.routes";
 import { driverLicenseRoutes } from "./routes/driverLicense.routes";
 import { driverRoutes } from "./routes/driver.routes";
+import { incidentRoutes } from "./routes/incident.routes";
 
 export class ExpressServer implements ServerInterface {
   private app: Express;
@@ -27,6 +28,7 @@ export class ExpressServer implements ServerInterface {
       this.app.use("/api", companyRoutes());
       this.app.use("/api", driverRoutes());
       this.app.use("/api", driverLicenseRoutes());
+      this.app.use("/api", incidentRoutes());
 
       // health check
       this.app.get("/health", (req, res) => {
