@@ -74,7 +74,7 @@ export class MongoDriverLicenseRepository implements DriverLicenseRepository {
     const licenseCategories = LicenseCategory.from(categoryStrings);
 
     if (licenseCategories instanceof Error) {
-      throw new Error("Invalid license category in database");
+      return null;
     }
 
     return DriverLicenseEntity.restore(
@@ -142,7 +142,6 @@ export class MongoDriverLicenseRepository implements DriverLicenseRepository {
         },
       }
     );
-
 
     if (result.modifiedCount === 0) {
       throw new Error("License not found");

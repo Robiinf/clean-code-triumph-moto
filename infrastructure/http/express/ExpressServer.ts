@@ -3,6 +3,7 @@ import express, { Express } from "express";
 import { ServerInterface } from "../ServerInterface";
 import { DatabaseConnector } from "../../config/DatabaseConfig";
 import { companyRoutes } from "./routes/company.routes";
+import { driverLicenseRoutes } from "./routes/driverLicense.routes";
 import { driverRoutes } from "./routes/driver.routes";
 
 export class ExpressServer implements ServerInterface {
@@ -25,6 +26,7 @@ export class ExpressServer implements ServerInterface {
       // Routes
       this.app.use("/api", companyRoutes());
       this.app.use("/api", driverRoutes());
+      this.app.use("/api", driverLicenseRoutes());
 
       // health check
       this.app.get("/health", (req, res) => {
