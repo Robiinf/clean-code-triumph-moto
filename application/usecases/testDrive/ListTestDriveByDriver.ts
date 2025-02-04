@@ -1,11 +1,9 @@
 import type { TestDriveRepository } from "../../repositories/TestDriveRepository";
 
 export class ListTestDriveByDriver {
-  public constructor(
-    private readonly testDriveRepository: TestDriveRepository
-  ) {}
+  constructor(private testDriveRepository: TestDriveRepository) {}
 
-  public execute(vehiculeId: string) {
-    return this.testDriveRepository.findByDriverId(vehiculeId);
+  public execute(driverId: string) {
+    return this.testDriveRepository.findByDriverId(driverId);
   }
 }

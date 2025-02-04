@@ -4,6 +4,7 @@ import { MongoDriverLicenseRepository } from "../mongoose/repositories/MongoDriv
 import { DatabaseConnector } from "./DatabaseConfig";
 import { SequelizeMotorcycleRepository } from "../sequelize/repositories/SequelizeMotorcycleRepository";
 import { MongoIncidentRepository } from "../mongoose/repositories/MongoIncidentRepository";
+import { SequelizeTestDriveRepository } from "../sequelize/repositories/SequelizeTestDriveRepository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -67,6 +68,12 @@ export class RepositoryFactory {
           this.databaseConnector.getSequelizeConnection()
         );
         break;
+      case "TestDriveEntity":
+        repository = new SequelizeTestDriveRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
+        break;
+
       default:
         throw new Error("Repository not found");
     }

@@ -4,6 +4,7 @@ import { DriverRepository } from "../../repositories/DriverRepository";
 import { TestDriveEntity } from "../../../domain/entities/TestDriveEntity";
 import { VehicleNotFound } from "../../../domain/errors/VehicleNotFound";
 import { DriverNotFound } from "../../../domain/errors/DriverNotFound";
+import { DriverLicenseNotFoundError } from "../../../domain/errors/DriverLicenseNotFoundError";
 
 export class CreateTestDrive {
   constructor(
@@ -26,6 +27,10 @@ export class CreateTestDrive {
     const driver = await this.driverRepository.findById(driverId);
     if (!driver) {
       return new DriverNotFound();
+    }
+
+    if (!driver.driverLicenseId) {
+      return new DriverLicenseNotFoundError();
     }
 
     const testDrive = TestDriveEntity.create(

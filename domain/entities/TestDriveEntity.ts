@@ -1,5 +1,7 @@
+import crypto from "crypto";
+
 export class TestDriveEntity {
-  private constructor(
+  constructor(
     public id: string,
     public motorcycleId: string,
     public driverId: string,

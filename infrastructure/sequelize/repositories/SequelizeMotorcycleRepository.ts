@@ -7,6 +7,7 @@ import { Mileage } from "../../../domain/types/mileage";
 import { MotorcycleType } from "../../../domain/types/motorcycleType";
 import { FuelType } from "../../../domain/types/fuelType";
 import { FuelCapacity } from "../../../domain/types/fuel-capacity";
+import { IdValidator } from "../../utils/IdValidator";
 
 export class SequelizeMotorcycleRepository implements MotorcycleRepository {
   constructor(private sequelize: Sequelize) {
@@ -31,11 +32,7 @@ export class SequelizeMotorcycleRepository implements MotorcycleRepository {
   }
 
   async findById(id: string): Promise<MotorcycleEntity | null> {
-    if (
-      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-        id
-      )
-    ) {
+    if (!IdValidator.isValid(id)) {
       return null;
     }
     const motorcycle = await MotorcycleModel.findByPk(id);
