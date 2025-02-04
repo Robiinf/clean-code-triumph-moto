@@ -3,7 +3,7 @@ import express, { Express } from "express";
 import { ServerInterface } from "../ServerInterface";
 import { DatabaseConnector } from "../../config/DatabaseConfig";
 import { companyRoutes } from "./routes/company.routes";
-import { CompanySchema } from "../../mongoose/schemas/CompanySchema";
+import { driverRoutes } from "./routes/driver.routes";
 
 export class ExpressServer implements ServerInterface {
   private app: Express;
@@ -24,6 +24,7 @@ export class ExpressServer implements ServerInterface {
 
       // Routes
       this.app.use("/api", companyRoutes());
+      this.app.use("/api", driverRoutes());
 
       // health check
       this.app.get("/health", (req, res) => {
