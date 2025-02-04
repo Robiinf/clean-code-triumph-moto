@@ -7,6 +7,10 @@ export const companyRoutes = () => {
   const controller = new CompanyController();
 
   router.post("/companies", controller.createCompany);
+  router.get("/companies", controller.listAllCompany);
+  router.get("/companies/:id", controller.getCompanyById);
+  router.delete("/companies/:id", controller.deleteCompany);
+  router.put("/companies/:id", controller.editCompany);
 
   return router;
 };
