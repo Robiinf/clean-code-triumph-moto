@@ -45,7 +45,6 @@ export class AddDriverLicense {
       licenseCategories
     );
 
-    // Mettre à jour le driver avec l'ID de la licence
     const updatedDriver = driver.update(
       driver.firstName,
       driver.lastName,

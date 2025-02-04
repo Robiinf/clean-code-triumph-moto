@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/routes/driver.routes.ts
 import { Router } from "express";
 import { DriverController } from "../controllers/driver.controller";
 

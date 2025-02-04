@@ -14,7 +14,6 @@ export class MongoIncidentRepository implements IncidentRepository {
     const existingIncident = await this.findById(incident.id);
 
     if (existingIncident) {
-      // Pour la mise à jour, on utilise la méthode arrayFilters
       await this.companyModel.updateOne(
         { "drivers.incidents.id": incident.id },
         {
@@ -35,7 +34,6 @@ export class MongoIncidentRepository implements IncidentRepository {
         }
       );
     } else {
-      // Pour un nouvel incident
       await this.companyModel.updateOne(
         { "drivers.id": incident.driverId },
         {

@@ -35,7 +35,6 @@ describe("EditDriver Integration", () => {
   beforeEach(async () => {
     await driverRepository["companyModel"].deleteMany({});
 
-    // Créer une company de test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -55,7 +54,6 @@ describe("EditDriver Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver de test
     testDriver = DriverEntity.create(
       "John",
       "Doe",

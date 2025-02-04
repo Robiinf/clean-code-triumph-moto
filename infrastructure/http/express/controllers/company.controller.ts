@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/controllers/company.controller.ts
 import { Request, Response, NextFunction } from "express";
 import { RepositoryFactory } from "../../../config/RepositoryFactory";
 import { CompanyRepository } from "../../../../application/repositories/CompanyRepository";

@@ -1,4 +1,3 @@
-// src/infrastructure/http/validation/schemas/motorcycle.schema.ts
 export interface CreateMotorcycleSchema {
   vin: string;
   model: string;

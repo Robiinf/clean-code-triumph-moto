@@ -30,7 +30,6 @@ describe("EditCompany Integration", () => {
   });
 
   it("should successfully edit an existing company", async () => {
-    // Créer une company à modifier
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -50,11 +49,10 @@ describe("EditCompany Integration", () => {
 
     await repository.save(company);
 
-    // Modifier la company
     const result = await editCompany.execute(
       company.id,
       "Updated Company Name",
-      "44306184100047", // Un autre SIRET valide
+      "44306184100047",
       "9876543210",
       "Updated Address",
       "Updated City",
@@ -62,10 +60,8 @@ describe("EditCompany Integration", () => {
       "Updated Country"
     );
 
-    // Vérifier qu'il n'y a pas d'erreur
     expect(result).toBeUndefined();
 
-    // Récupérer la company mise à jour
     const updatedCompany = await repository.findById(company.id);
     expect(updatedCompany).not.toBeNull();
     expect(updatedCompany?.name).toBe("Updated Company Name");
@@ -96,7 +92,6 @@ describe("EditCompany Integration", () => {
   });
 
   it("should return error when company name is invalid", async () => {
-    // Créer une company valide d'abord
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -116,10 +111,9 @@ describe("EditCompany Integration", () => {
 
     await repository.save(company);
 
-    // Essayer de mettre à jour avec un nom invalide
     const result = await editCompany.execute(
       company.id,
-      "Ab", // Nom trop court
+      "Ab",
       "73282932000074",
       "0123456789",
       "Address",
@@ -130,7 +124,6 @@ describe("EditCompany Integration", () => {
 
     expect(result).toBeInstanceOf(CompanyNameTooShortError);
 
-    // Vérifier que la company n'a pas été modifiée
     const unchangedCompany = await repository.findById(company.id);
     expect(unchangedCompany?.name).toBe("Test Company");
   });

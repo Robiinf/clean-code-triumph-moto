@@ -48,7 +48,7 @@ export class MongoCompanyRepository implements CompanyRepository {
   async save(company: CompanyEntity): Promise<void> {
     const existingCompanyWithSiret = await this.companyModel.findOne({
       siret: company.siret.value,
-      id: { $ne: company.id }, // exclure le document actuel de la recherche
+      id: { $ne: company.id },
     });
 
     if (existingCompanyWithSiret) {
@@ -68,8 +68,6 @@ export class MongoCompanyRepository implements CompanyRepository {
         country: company.country,
         createdAt: company.createdAt,
         updatedAt: company.updatedAt,
-        // Gérer les drivers indépendamment
-        //drivers: [],
       },
       { upsert: true, new: true }
     );
@@ -77,8 +75,5 @@ export class MongoCompanyRepository implements CompanyRepository {
 
   async delete(id: string): Promise<void> {
     const result = await this.companyModel.deleteOne({ id });
-    /* if (result.deletedCount === 0) {
-      throw new Error("Company not found");
-    } */
   }
 }

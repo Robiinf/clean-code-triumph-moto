@@ -1,16 +1,3 @@
-/* // tests/application/usecases/driverLicense/GetDriverLicense.integration.test.ts
-import { DatabaseConnector } from "../../../../infrastructure/config/DatabaseConfig";
-import { MongoDriverRepository } from "../../../../infrastructure/mongoose/repositories/MongoDriverRepository";
-import { MongoDriverLicenseRepository } from "../../../../infrastructure/mongoose/repositories/MongoDriverLicenseRepository";
-import { MongoCompanyRepository } from "../../../../infrastructure/mongoose/repositories/MongoCompanyRepository";
-import { GetDriverLicense } from "../../../../application/usecases/driverLicense/GetDriverLicense";
-import { AddDriverLicense } from "../../../../application/usecases/driverLicense/AddDriverLicense";
-import { CompanyEntity } from "../../../../domain/entities/CompanyEntity";
-import { DriverEntity } from "../../../../domain/entities/DriverEntity";
-import { CompanyName } from "../../../../domain/types/CompanyName";
-import { CompanySiret } from "../../../../domain/types/CompanySiret";
-import { DriverLicenseNotFoundError } from "../../../../domain/errors/DriverLicenseNotFoundError"; */
-
 import { DatabaseConnector } from "../../../../config/DatabaseConfig";
 import { GetDriverLicense } from "../../../../../application/usecases/driverLicense/GetDriverLicense";
 import { AddDriverLicense } from "../../../../../application/usecases/driverLicense/AddDriverLicense";
@@ -59,7 +46,6 @@ describe("GetDriverLicense Integration", () => {
   beforeEach(async () => {
     await companyRepository["companyModel"].deleteMany({});
 
-    // Créer une company de test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -79,7 +65,6 @@ describe("GetDriverLicense Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver de test
     testDriver = DriverEntity.create(
       "John",
       "Doe",
@@ -91,7 +76,6 @@ describe("GetDriverLicense Integration", () => {
 
     await driverRepository.save(testDriver);
 
-    // Créer une licence
     const issueDate = new Date();
     const expirationDate = new Date();
     expirationDate.setFullYear(expirationDate.getFullYear() + 1);

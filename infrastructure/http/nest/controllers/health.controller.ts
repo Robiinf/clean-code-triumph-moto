@@ -1,4 +1,3 @@
-// src/infrastructure/http/nest/controllers/health.controller.ts
 import { Controller, Get } from "@nestjs/common";
 
 @Controller("health")

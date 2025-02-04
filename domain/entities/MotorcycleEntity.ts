@@ -61,7 +61,7 @@ export class MotorcycleEntity {
     fuelTankCapacityInLiters: FuelCapacity
   ): MotorcycleEntity {
     return new MotorcycleEntity(
-      this.id, // Garder l'ID original
+      this.id,
       vin,
       model,
       year,

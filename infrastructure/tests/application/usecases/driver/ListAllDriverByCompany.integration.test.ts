@@ -33,7 +33,6 @@ describe("ListAllDriverByCompany Integration", () => {
   beforeEach(async () => {
     await driverRepository["companyModel"].deleteMany({});
 
-    // Créer une company de test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -55,7 +54,6 @@ describe("ListAllDriverByCompany Integration", () => {
   });
 
   it("should return all drivers for a company", async () => {
-    // Créer quelques drivers de test
     const driver1 = DriverEntity.create(
       "John",
       "Doe",

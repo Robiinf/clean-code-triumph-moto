@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/ExpressServer.ts
 import express, { Express } from "express";
 import { ServerInterface } from "../ServerInterface";
 import { DatabaseConnector } from "../../config/DatabaseConfig";
@@ -18,19 +17,15 @@ export class ExpressServer implements ServerInterface {
 
   async start(port: number): Promise<void> {
     try {
-      // Initialiser les connexions DB
       await this.databaseConnector.initialize();
 
-      // Middleware
       this.app.use(express.json());
 
-      // Routes
       this.app.use("/api", companyRoutes());
       this.app.use("/api", driverRoutes());
       this.app.use("/api", driverLicenseRoutes());
       this.app.use("/api", incidentRoutes());
 
-      // health check
       this.app.get("/health", (req, res) => {
         res.send("Server is up and running");
       });

@@ -36,7 +36,6 @@ describe("AddMotorcycle Integration", () => {
   });
 
   beforeEach(async () => {
-    // Nettoyer la table motorcycles avant chaque test
     await databaseConnector
       .getSequelizeConnection()
       .query("DELETE FROM motorcycles");
@@ -44,21 +43,20 @@ describe("AddMotorcycle Integration", () => {
 
   it("should successfully add a motorcycle", async () => {
     const result = await addMotorcycle.execute(
-      "1HGCM82633A123456", // VIN valide
+      "1HGCM82633A123456",
       "Triumph Street Triple",
       2023,
       "Available",
-      5000, // kilométrage
+      5000,
       "Naked",
-      95, // puissance
+      95,
       "Diesel",
       "Manual",
-      15 // capacité du réservoir
+      15
     );
 
     expect(result).toBeUndefined();
 
-    // Vérifier que la moto a été créée
     const motorcycles = await motorcycleRepository.findAll();
     expect(motorcycles).toHaveLength(1);
     expect(motorcycles[0].model).toBe("Triumph Street Triple");
@@ -83,7 +81,6 @@ describe("AddMotorcycle Integration", () => {
 
     expect(result).toBeInstanceOf(InvalidVehicleIdentificationNumber);
 
-    // Vérifier qu'aucune moto n'a été créée
     const motorcycles = await motorcycleRepository.findAll();
     expect(motorcycles).toHaveLength(0);
   });
@@ -95,7 +92,7 @@ describe("AddMotorcycle Integration", () => {
       2023,
       "Available",
       5000,
-      "InvalidType", // Type invalide
+      "InvalidType",
       95,
       "Diesel",
       "Manual",
@@ -104,7 +101,6 @@ describe("AddMotorcycle Integration", () => {
 
     expect(result).toBeInstanceOf(InvalidMotorcycleType);
 
-    // Vérifier qu'aucune moto n'a été créée
     const motorcycles = await motorcycleRepository.findAll();
     expect(motorcycles).toHaveLength(0);
   });
@@ -118,14 +114,13 @@ describe("AddMotorcycle Integration", () => {
       5000,
       "Naked",
       95,
-      "InvalidFuel", // Type de carburant invalide
+      "InvalidFuel",
       "Manual",
       15
     );
 
     expect(result).toBeInstanceOf(InvalidFuelType);
 
-    // Vérifier qu'aucune moto n'a été créée
     const motorcycles = await motorcycleRepository.findAll();
     expect(motorcycles).toHaveLength(0);
   });
@@ -136,7 +131,7 @@ describe("AddMotorcycle Integration", () => {
       "Triumph Street Triple",
       2023,
       "Available",
-      -5000, // Kilométrage négatif
+      -5000,
       "Naked",
       95,
       "Diesel",
@@ -146,7 +141,6 @@ describe("AddMotorcycle Integration", () => {
 
     expect(result).toBeInstanceOf(NegativeMileage);
 
-    // Vérifier qu'aucune moto n'a été créée
     const motorcycles = await motorcycleRepository.findAll();
     expect(motorcycles).toHaveLength(0);
   });
@@ -162,12 +156,11 @@ describe("AddMotorcycle Integration", () => {
       95,
       "Diesel",
       "Manual",
-      0 // Capacité invalide
+      0
     );
 
     expect(result).toBeInstanceOf(CapacityNegative);
 
-    // Vérifier qu'aucune moto n'a été créée
     const motorcycles = await motorcycleRepository.findAll();
     expect(motorcycles).toHaveLength(0);
   });

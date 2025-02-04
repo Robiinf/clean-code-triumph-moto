@@ -54,7 +54,6 @@ export class EditMotorcycle {
       return checkedFuelCapacity;
     }
 
-    // Mettre à jour la moto
     const updatedMotorcycle = motorcycle.update(
       checkedVin,
       model,

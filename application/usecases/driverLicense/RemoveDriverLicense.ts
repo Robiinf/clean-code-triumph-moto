@@ -15,16 +15,13 @@ export class RemoveDriverLicense {
       return new DriverLicenseNotFoundError();
     }
 
-    // Trouver le driver associé à cette licence
     const driver = await this.driverRepository.findByDriverLicenseId(id);
     if (!driver) {
       return new DriverNotFound();
     }
 
-    // D'abord supprimer la licence
     await this.driverLicenseRepository.delete(id);
 
-    // Ensuite mettre à jour le driver
     const updatedDriver = driver.update(
       driver.firstName,
       driver.lastName,
@@ -32,7 +29,7 @@ export class RemoveDriverLicense {
       driver.email,
       driver.birthDate,
       driver.companyId,
-      null // Enlever la référence à la licence
+      null
     );
 
     await this.driverRepository.save(updatedDriver);

@@ -28,7 +28,6 @@ describe("DeleteCompany Integration", () => {
   });
 
   it("should successfully delete an existing company", async () => {
-    // Créer une company à supprimer
 
     const companyName1 = CompanyName.from("First Company");
     const companySiret1 = CompanySiret.from("44306184100047");
@@ -51,19 +50,15 @@ describe("DeleteCompany Integration", () => {
     const savedCompany = await repository.findById(company.id);
     expect(savedCompany).not.toBeNull();
 
-    // Vérifier que la company existe dans la liste complète
     let companies = await repository.findAll();
     expect(companies).toHaveLength(1);
     expect(companies[0].id).toBe(company.id);
 
-    // Supprimer la company
     await deleteCompany.execute(company.id);
 
-    // Vérifier que la company a été supprimée
     companies = await repository.findAll();
     expect(companies).toHaveLength(0);
 
-    // Vérifier aussi avec findById
     const deletedCompany = await repository.findById(company.id);
     expect(deletedCompany).toBeNull();
   });

@@ -1,4 +1,3 @@
-// src/infrastructure/http/validation/schemas/company.schema.ts
 export interface CreateCompanySchema {
   name: string;
   siret: string;

@@ -16,7 +16,6 @@ export class EditIncident {
       return new IncidentNotFoundError();
     }
 
-    // Utiliser la méthode update au lieu de create
     const updatedIncident = incident.update(
       driverId,
       motorcycleId,

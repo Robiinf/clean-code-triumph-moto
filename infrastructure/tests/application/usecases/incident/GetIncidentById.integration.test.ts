@@ -58,11 +58,9 @@ describe("GetIncidentById Integration", () => {
   });
 
   beforeEach(async () => {
-    // Nettoyer la base de données
     await companyRepository["companyModel"].deleteMany({});
     await MotorcycleModel.destroy({ where: {} });
 
-    // Créer une company test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -82,7 +80,6 @@ describe("GetIncidentById Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver test
     testDriver = DriverEntity.create(
       "John",
       "Doe",
@@ -94,7 +91,6 @@ describe("GetIncidentById Integration", () => {
 
     await driverRepository.save(testDriver);
 
-    // Créer une moto test
     const addMotorcycle = new AddMotorcycle(motorcycleRepository);
     await addMotorcycle.execute(
       "1HGCM82633A123456",
@@ -112,7 +108,6 @@ describe("GetIncidentById Integration", () => {
     const motorcycles = await motorcycleRepository.findAll();
     testMotorcycleId = motorcycles[0].id;
 
-    // Créer un incident test
     const result = await createIncident.execute(
       testDriver.id,
       testMotorcycleId,
@@ -120,7 +115,6 @@ describe("GetIncidentById Integration", () => {
       "Test incident details"
     );
 
-    // Récupérer l'ID de l'incident créé
     const incidents = await incidentRepository.findByDriver(testDriver.id);
     testIncidentId = incidents[0].id;
   });

@@ -24,7 +24,6 @@ export class EditDriverLicense {
       return new DriverLicenseNotFoundError();
     }
 
-    // Trouver le driver associé à cette licence
     const driver = await this.driverRepository.findByDriverLicenseId(id);
     if (!driver) {
       return new DriverNotFound();

@@ -61,11 +61,9 @@ describe("ListIncidentByMotorcycle Integration", () => {
   });
 
   beforeEach(async () => {
-    // Nettoyer la base de données
     await companyRepository["companyModel"].deleteMany({});
     await MotorcycleModel.destroy({ where: {} });
 
-    // Créer une company test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -85,7 +83,6 @@ describe("ListIncidentByMotorcycle Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver test
     testDriver = DriverEntity.create(
       "John",
       "Doe",
@@ -107,7 +104,6 @@ describe("ListIncidentByMotorcycle Integration", () => {
     await driverRepository.save(testDriver);
     await driverRepository.save(testDriver2);
 
-    // Créer une moto test
     const addMotorcycle = new AddMotorcycle(motorcycleRepository);
     await addMotorcycle.execute(
       "1HGCM82633A123456",
@@ -139,7 +135,6 @@ describe("ListIncidentByMotorcycle Integration", () => {
     testMotorcycleId = motorcycles[0].id;
     testMotorcycleId2 = motorcycles[1].id;
 
-    // Créer un incident test
     await createIncident.execute(
       testDriver.id,
       testMotorcycleId,

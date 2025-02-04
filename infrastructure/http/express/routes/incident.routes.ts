@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/routes/incident.routes.ts
 import { Router } from "express";
 import { IncidentController } from "../controllers/incident.controller";
 

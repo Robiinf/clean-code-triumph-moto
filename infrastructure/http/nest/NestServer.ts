@@ -1,4 +1,3 @@
-// src/infrastructure/http/nest/NestServer.ts
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./modules/app.module";
@@ -17,18 +16,14 @@ export class NestServer implements ServerInterface {
 
   async start(port: number): Promise<void> {
     try {
-      // Initialiser les connexions DB
       await this.databaseConnector.initialize();
 
-      // Synchroniser les modèles Sequelize
       const sequelize = this.databaseConnector.getSequelizeConnection();
       await MotorcycleModel.initModel(sequelize);
       await MotorcycleModel.sync({ force: false });
 
-      // Créer et démarrer l'application NestJS
       this.app = await NestFactory.create(AppModule);
 
-      // Activer le parsing du JSON
       this.app.enableCors();
 
       await this.app.listen(port);

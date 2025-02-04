@@ -107,13 +107,11 @@ export class DatabaseConnector {
 
   private async testConnections(): Promise<void> {
     try {
-      // Test MongoDB connection
       if (!this.mongoConnection) {
         throw new Error("MongoDB connection not established");
       }
       await this.mongoConnection.asPromise();
 
-      // Test PostgreSQL connection
       if (!this.sequelizeConnection) {
         throw new Error("PostgreSQL connection not established");
       }

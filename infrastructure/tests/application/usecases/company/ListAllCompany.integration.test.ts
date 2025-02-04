@@ -33,8 +33,6 @@ describe("ListAllCompany Integration", () => {
   });
 
   it("should return all existing companies", async () => {
-    // Créer quelques companies pour le test
-
     const companyName1 = CompanyName.from("First Company");
     const companySiret1 = CompanySiret.from("73282932000074");
     const companyName2 = CompanyName.from("Second Company");

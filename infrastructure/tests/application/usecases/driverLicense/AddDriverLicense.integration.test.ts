@@ -45,7 +45,6 @@ describe("AddDriverLicense Integration", () => {
   beforeEach(async () => {
     await companyRepository["companyModel"].deleteMany({});
 
-    // Créer une company de test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -65,7 +64,6 @@ describe("AddDriverLicense Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver de test
     testDriver = DriverEntity.create(
       "John",
       "Doe",
@@ -94,11 +92,9 @@ describe("AddDriverLicense Integration", () => {
 
     expect(result).toBeUndefined();
 
-    // Vérifier que le driver a été mis à jour avec une licence
     const updatedDriver = await driverRepository.findById(testDriver.id);
     expect(updatedDriver).not.toBeNull();
     expect(updatedDriver?.driverLicenseId).not.toBeNull();
-    // Vérifier que la licence a été correctement créée
     const license = await driverLicenseRepository.findByDriver(testDriver.id);
 
     expect(license).not.toBeNull();
@@ -128,7 +124,7 @@ describe("AddDriverLicense Integration", () => {
 
   it("should return error when license dates are invalid", async () => {
     const issueDate = new Date();
-    const expirationDate = new Date(issueDate.getTime() - 86400000); // Un jour avant
+    const expirationDate = new Date(issueDate.getTime() - 86400000);
 
     const result = await addDriverLicense.execute(
       "12345",
@@ -141,7 +137,6 @@ describe("AddDriverLicense Integration", () => {
 
     expect(result).toBeInstanceOf(InvalidLicenseDate);
 
-    // Vérifier qu'aucune licence n'a été créée
     const updatedDriver = await driverRepository.findById(testDriver.id);
     expect(updatedDriver?.driverLicenseId).toBeNull();
   });
@@ -162,7 +157,6 @@ describe("AddDriverLicense Integration", () => {
 
     expect(result).toBeInstanceOf(InvalidLicenseCategory);
 
-    // Vérifier qu'aucune licence n'a été créée
     const updatedDriver = await driverRepository.findById(testDriver.id);
     expect(updatedDriver?.driverLicenseId).toBeNull();
   });

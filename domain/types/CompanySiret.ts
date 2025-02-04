@@ -19,7 +19,6 @@ export class CompanySiret {
     for (let i = 0; i < 14; i++) {
       let digit = parseInt(siret.charAt(i), 10);
       if (i % 2 === 0) {
-        // Position paire (index 0, 2, ...)
         digit *= 2;
         if (digit > 9) digit -= 9;
       }

@@ -35,7 +35,6 @@ describe("RemoveDriver Integration", () => {
   beforeEach(async () => {
     await driverRepository["companyModel"].deleteMany({});
 
-    // Créer une company de test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -55,7 +54,6 @@ describe("RemoveDriver Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver de test
     testDriver = DriverEntity.create(
       "John",
       "Doe",
@@ -89,7 +87,6 @@ describe("RemoveDriver Integration", () => {
   });
 
   it("should only remove the specified driver and keep others", async () => {
-    // Créer un second driver
     const secondDriver = DriverEntity.create(
       "Jane",
       "Smith",
@@ -101,19 +98,15 @@ describe("RemoveDriver Integration", () => {
 
     await driverRepository.save(secondDriver);
 
-    // Vérifier que les deux drivers sont présents
     let driversInCompany = await driverRepository.findByCompany(testCompany.id);
     expect(driversInCompany).toHaveLength(2);
 
-    // Supprimer le premier driver
     const result = await removeDriver.execute(testDriver.id);
     expect(result).toBeUndefined();
 
-    // Vérifier que le premier driver a été supprimé
     const removedDriver = await driverRepository.findById(testDriver.id);
     expect(removedDriver).toBeNull();
 
-    // Vérifier que le second driver existe toujours
     driversInCompany = await driverRepository.findByCompany(testCompany.id);
     expect(driversInCompany).toHaveLength(1);
     expect(driversInCompany[0].id).toBe(secondDriver.id);

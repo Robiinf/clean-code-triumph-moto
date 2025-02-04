@@ -50,7 +50,6 @@ describe("RemoveDriverLicense Integration", () => {
   beforeEach(async () => {
     await companyRepository["companyModel"].deleteMany({});
 
-    // Créer une company de test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -70,7 +69,6 @@ describe("RemoveDriverLicense Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver de test
     testDriver = DriverEntity.create(
       "John",
       "Doe",
@@ -82,7 +80,6 @@ describe("RemoveDriverLicense Integration", () => {
 
     await driverRepository.save(testDriver);
 
-    // Créer une licence
     const issueDate = new Date();
     const expirationDate = new Date();
     expirationDate.setFullYear(expirationDate.getFullYear() + 1);
@@ -105,11 +102,9 @@ describe("RemoveDriverLicense Integration", () => {
 
     expect(result).toBeUndefined();
 
-    // Vérifier que la licence a été supprimée
     const license = await driverLicenseRepository.findById(testLicenseId);
     expect(license).toBeNull();
 
-    // Vérifier que le driverLicenseId a été retiré du driver
     const updatedDriver = await driverRepository.findById(testDriver.id);
     expect(updatedDriver?.driverLicenseId).toBeNull();
   });

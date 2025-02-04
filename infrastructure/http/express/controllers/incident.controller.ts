@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/controllers/incident.controller.ts
 import { Request, Response, NextFunction } from "express";
 import { RepositoryFactory } from "../../../config/RepositoryFactory";
 import { IncidentRepository } from "../../../../application/repositories/IncidentRepository";

@@ -52,7 +52,6 @@ describe("EditDriverLicense Integration", () => {
   beforeEach(async () => {
     await companyRepository["companyModel"].deleteMany({});
 
-    // Créer une company de test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -72,7 +71,6 @@ describe("EditDriverLicense Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver de test
     testDriver = DriverEntity.create(
       "John",
       "Doe",
@@ -84,7 +82,6 @@ describe("EditDriverLicense Integration", () => {
 
     await driverRepository.save(testDriver);
 
-    // Créer une licence pour le driver
     const issueDate = new Date();
     const expirationDate = new Date();
     expirationDate.setFullYear(expirationDate.getFullYear() + 1);
@@ -98,7 +95,6 @@ describe("EditDriverLicense Integration", () => {
       testDriver.id
     );
 
-    // Récupérer l'ID de la licence créée
     const driver = await driverRepository.findById(testDriver.id);
     testLicenseId = driver!.driverLicenseId!;
   });
@@ -110,16 +106,15 @@ describe("EditDriverLicense Integration", () => {
 
     const result = await editDriverLicense.execute(
       testLicenseId,
-      "54321", // Nouveau numéro
+      "54321",
       newIssueDate,
       newExpirationDate,
       "RENEWED",
-      ["A1", "B", "C"] // Nouvelles catégories
+      ["A1", "B", "C"]
     );
 
     expect(result).toBeUndefined();
 
-    // Vérifier que la licence a été mise à jour
     const updatedLicense = await driverLicenseRepository.findById(
       testLicenseId
     );
@@ -146,7 +141,7 @@ describe("EditDriverLicense Integration", () => {
 
   it("should return error when license dates are invalid", async () => {
     const issueDate = new Date();
-    const expirationDate = new Date(issueDate.getTime() - 86400000); // Un jour avant
+    const expirationDate = new Date(issueDate.getTime() - 86400000);
 
     const result = await editDriverLicense.execute(
       testLicenseId,
@@ -159,7 +154,6 @@ describe("EditDriverLicense Integration", () => {
 
     expect(result).toBeInstanceOf(InvalidLicenseDate);
 
-    // Vérifier que la licence n'a pas été modifiée
     const license = await driverLicenseRepository.findById(testLicenseId);
     expect(license?.licenseNumber).toBe("12345");
   });
@@ -176,7 +170,6 @@ describe("EditDriverLicense Integration", () => {
 
     expect(result).toBeInstanceOf(InvalidLicenseCategory);
 
-    // Vérifier que la licence n'a pas été modifiée
     const license = await driverLicenseRepository.findById(testLicenseId);
     expect(license?.categories.map((cat) => cat.value)).toEqual(
       expect.arrayContaining(["A1", "B"])

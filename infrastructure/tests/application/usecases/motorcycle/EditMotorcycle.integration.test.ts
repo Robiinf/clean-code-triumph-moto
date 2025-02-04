@@ -36,7 +36,6 @@ describe("EditMotorcycle Integration", () => {
   beforeEach(async () => {
     await MotorcycleModel.destroy({ where: {} });
 
-    // Créer une moto de test
     await addMotorcycle.execute(
       "1HGCM82633A123456",
       "Triumph Street Triple",
@@ -57,13 +56,13 @@ describe("EditMotorcycle Integration", () => {
   it("should successfully edit a motorcycle", async () => {
     const result = await editMotorcycle.execute(
       testMotorcycleId,
-      "1HGCM82633A789012", // Nouveau VIN
-      "Triumph Street Triple RS", // Nouveau modèle
-      2024, // Nouvelle année
-      "Maintenance", // Nouveau statut
-      7500, // Nouveau kilométrage
+      "1HGCM82633A789012",
+      "Triumph Street Triple RS",
+      2024,
+      "Maintenance",
+      7500,
       "Naked",
-      100, // Nouvelle puissance
+      100,
       "Diesel",
       "Manual",
       15
@@ -71,7 +70,6 @@ describe("EditMotorcycle Integration", () => {
 
     expect(result).toBeUndefined();
 
-    // Vérifier les modifications
     const updatedMotorcycle = await motorcycleRepository.findById(
       testMotorcycleId
     );
@@ -124,7 +122,6 @@ describe("EditMotorcycle Integration", () => {
 
     expect(result).toBeInstanceOf(InvalidVehicleIdentificationNumber);
 
-    // Vérifier que la moto n'a pas été modifiée
     const motorcycle = await motorcycleRepository.findById(testMotorcycleId);
     expect(motorcycle?.vin.value).toBe("1HGCM82633A123456");
   });

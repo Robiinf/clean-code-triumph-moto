@@ -1,4 +1,3 @@
-// infrastructure/mongoose/schemas/CompanySchema.ts
 import mongoose, { Schema } from "mongoose";
 import { CompanyName } from "../../../domain/types/CompanyName";
 import { CompanySiret } from "../../../domain/types/CompanySiret";
@@ -52,7 +51,6 @@ export const CompanySchema = new Schema(
   }
 );
 
-// Indexes
 CompanySchema.index({ id: 1 }, { unique: true });
 CompanySchema.index({ siret: 1 }, { unique: true });
 CompanySchema.index({ "drivers.id": 1 });

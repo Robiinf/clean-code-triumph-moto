@@ -55,11 +55,9 @@ describe("CreateIncidentReport Integration", () => {
   });
 
   beforeEach(async () => {
-    // Nettoyer la base de données
     await companyRepository["companyModel"].deleteMany({});
     await MotorcycleModel.destroy({ where: {} });
 
-    // Créer une company test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -79,7 +77,6 @@ describe("CreateIncidentReport Integration", () => {
 
     await companyRepository.save(testCompany);
 
-    // Créer un driver test
     testDriver = DriverEntity.create(
       "John",
       "Doe",
@@ -91,7 +88,6 @@ describe("CreateIncidentReport Integration", () => {
 
     await driverRepository.save(testDriver);
 
-    // Créer une moto test
     const addMotorcycle = new AddMotorcycle(motorcycleRepository);
     await addMotorcycle.execute(
       "1HGCM82633A123456",
@@ -121,7 +117,6 @@ describe("CreateIncidentReport Integration", () => {
 
     expect(result).toBeUndefined();
 
-    // Vérifier que l'incident a été créé
     const incidents = await incidentRepository.findByDriver(testDriver.id);
     expect(incidents).toHaveLength(1);
     expect(incidents[0].driverId).toBe(testDriver.id);
@@ -131,7 +126,6 @@ describe("CreateIncidentReport Integration", () => {
   });
 
   it("should create multiple incidents for the same driver", async () => {
-    // Créer premier incident
     await createIncident.execute(
       testDriver.id,
       testMotorcycleId,
@@ -139,7 +133,6 @@ describe("CreateIncidentReport Integration", () => {
       "First incident"
     );
 
-    // Créer second incident
     await createIncident.execute(
       testDriver.id,
       testMotorcycleId,
@@ -163,7 +156,6 @@ describe("CreateIncidentReport Integration", () => {
 
     expect(result).toBeInstanceOf(DriverNotFound);
 
-    // Vérifier qu'aucun incident n'a été créé
     const incidents = await incidentRepository.findByMotorcycle(
       testMotorcycleId
     );
@@ -180,7 +172,6 @@ describe("CreateIncidentReport Integration", () => {
 
     expect(result).toBeInstanceOf(VehicleNotFound);
 
-    // Vérifier qu'aucun incident n'a été créé
     const incidents = await incidentRepository.findByDriver(testDriver.id);
     expect(incidents).toHaveLength(0);
   });

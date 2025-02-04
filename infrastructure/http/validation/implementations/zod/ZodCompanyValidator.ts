@@ -1,4 +1,3 @@
-// src/infrastructure/http/validation/implementations/zod/ZodCompanyValidator.ts
 import { z } from "zod";
 import {
   ValidatorInterface,

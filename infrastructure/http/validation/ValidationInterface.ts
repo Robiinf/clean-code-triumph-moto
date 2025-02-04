@@ -1,4 +1,3 @@
-// src/infrastructure/http/validation/ValidationInterface.ts
 export interface ValidationResult<T> {
   success: boolean;
   data?: T;

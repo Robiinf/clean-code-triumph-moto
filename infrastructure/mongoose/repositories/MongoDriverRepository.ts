@@ -7,7 +7,6 @@ export class MongoDriverRepository implements DriverRepository {
   private companyModel;
 
   constructor(connection: Connection) {
-    // On utilise le model Company car les drivers sont stockés comme sous-documents
     this.companyModel = connection.model("CompanyEntity", CompanySchema);
   }
 
@@ -15,7 +14,6 @@ export class MongoDriverRepository implements DriverRepository {
     const existingDriver = await this.findById(driver.id);
 
     if (existingDriver) {
-      // Mise à jour d'un driver existant
       await this.companyModel.updateOne(
         {
           id: driver.companyId,
@@ -40,7 +38,6 @@ export class MongoDriverRepository implements DriverRepository {
         }
       );
     } else {
-      // Ajout d'un nouveau driver
       await this.companyModel.updateOne(
         { id: driver.companyId },
         {
@@ -77,7 +74,6 @@ export class MongoDriverRepository implements DriverRepository {
     const driver = company.drivers[0];
 
     const driverLicenseId = driver.driverLicense?.id || null;
-    // Utiliser restore au lieu de create pour garder l'ID original
     const restoredDriver = DriverEntity.restore(
       driver.id,
       driver.firstName,
@@ -117,10 +113,8 @@ export class MongoDriverRepository implements DriverRepository {
     );
   }
 
-  // Dans MongoDriverRepository
   async delete(id: string): Promise<void> {
     const existingDriver = await this.findById(id);
-    // On utilise $pull pour retirer le driver du tableau drivers
     const result = await this.companyModel.updateOne(
       { id: existingDriver.companyId },
       {
@@ -132,9 +126,8 @@ export class MongoDriverRepository implements DriverRepository {
   }
 
   async findByDriverLicenseId(licenseId: string): Promise<DriverEntity | null> {
-    // On cherche un driver qui a ce driverLicenseId
     const company = await this.companyModel.findOne(
-      { "drivers.driverLicense.id": licenseId }, // Changement ici
+      { "drivers.driverLicense.id": licenseId },
       { "drivers.$": 1, id: 1 }
     );
 
@@ -151,7 +144,7 @@ export class MongoDriverRepository implements DriverRepository {
       driver.email,
       driver.birthDate,
       company.id,
-      driver.driverLicense?.id, // Changement ici aussi
+      driver.driverLicense?.id,
       driver.createdAt,
       driver.updatedAt
     );

@@ -1,4 +1,3 @@
-// src/infrastructure/http/validation/implementations/zod/ZodDriverValidator.ts
 import { z } from "zod";
 import {
   ValidatorInterface,
@@ -14,7 +13,7 @@ export class ZodDriverValidator
     lastName: z.string().min(1),
     phone: z.string().min(1),
     email: z.string().email(),
-    birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), // format YYYY-MM-DD
+    birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     companyId: z.string().uuid(),
     driverLicenseId: z.string().uuid().optional(),
   });

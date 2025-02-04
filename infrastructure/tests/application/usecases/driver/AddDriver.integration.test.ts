@@ -1,5 +1,3 @@
-// tests/application/usecases/driver/AddDriver.integration.test.ts
-
 import { DatabaseConnector } from "../../../../config/DatabaseConfig";
 import { MongoDriverRepository } from "../../../../mongoose/repositories/MongoDriverRepository";
 import { MongoCompanyRepository } from "../../../../mongoose/repositories/MongoCompanyRepository";
@@ -35,7 +33,6 @@ describe("AddDriver Integration", () => {
   beforeEach(async () => {
     await driverRepository["companyModel"].deleteMany({});
 
-    // Créer une company de test
     const companyName = CompanyName.from("Test Company");
     const companySiret = CompanySiret.from("73282932000074");
 
@@ -57,7 +54,6 @@ describe("AddDriver Integration", () => {
   });
 
   it("should successfully add a driver without license", async () => {
-    // Act
     const result = await addDriver.execute(
       "John",
       "Doe",
@@ -67,7 +63,6 @@ describe("AddDriver Integration", () => {
       testCompany.id
     );
 
-    // Assert
     expect(result).toBeUndefined();
 
     const drivers = await driverRepository.findByCompany(testCompany.id);
@@ -77,7 +72,6 @@ describe("AddDriver Integration", () => {
   });
 
   it("should return CompanyNotFound when company doesn't exist", async () => {
-    // Act
     const result = await addDriver.execute(
       "John",
       "Doe",
@@ -88,7 +82,6 @@ describe("AddDriver Integration", () => {
       "license123"
     );
 
-    // Assert
     expect(result).toBeInstanceOf(CompanyNotFound);
 
     const drivers = await driverRepository.findByCompany(

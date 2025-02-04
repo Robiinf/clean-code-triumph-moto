@@ -1,4 +1,3 @@
-// src/infrastructure/http/validation/implementations/zod/ZodMotorcycleValidator.ts
 import { z } from "zod";
 import {
   ValidatorInterface,

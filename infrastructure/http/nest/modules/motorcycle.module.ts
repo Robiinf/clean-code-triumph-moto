@@ -1,4 +1,3 @@
-// src/infrastructure/http/nest/modules/motorcycle.module.ts
 import { Module } from "@nestjs/common";
 import { MotorcycleController } from "../controllers/motorcycle.controller";
 import { MotorcycleRepository } from "../../../../application/repositories/MotorcycleRepository";

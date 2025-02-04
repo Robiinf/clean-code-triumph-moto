@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/routes/company.routes.ts
 import { Router } from "express";
 import { CompanyController } from "../controllers/company.controller";
 

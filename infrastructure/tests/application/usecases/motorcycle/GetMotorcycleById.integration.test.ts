@@ -1,11 +1,3 @@
-/* // tests/application/usecases/motorcycle/GetMotorcycleById.integration.test.ts
-import { DatabaseConnector } from "../../../../infrastructure/config/DatabaseConfig";
-import { SequelizeMotorcycleRepository } from "../../../../infrastructure/sequelize/repositories/SequelizeMotorcycleRepository";
-import { GetMotorcycleById } from "../../../../application/usecases/motorcycle/GetMotorcycleById";
-import { AddMotorcycle } from "../../../../application/usecases/motorcycle/AddMotorcycle";
-import { MotorcycleModel } from "../../../../infrastructure/sequelize/models/MotorcycleModel";
-import { MotorcycleNotFound } from "../../../../domain/errors/MotorcycleNotFound"; */
-
 import { DatabaseConnector } from "../../../../config/DatabaseConfig";
 import { SequelizeMotorcycleRepository } from "../../../../sequelize/repositories/SequelizeMotorcycleRepository";
 import { GetMotorcycleById } from "../../../../../application/usecases/motorcycle/GetMotorcycleById";
@@ -40,7 +32,6 @@ describe("GetMotorcycleById Integration", () => {
   beforeEach(async () => {
     await MotorcycleModel.destroy({ where: {} });
 
-    // Créer une moto de test
     await addMotorcycle.execute(
       "1HGCM82633A123456",
       "Triumph Street Triple",

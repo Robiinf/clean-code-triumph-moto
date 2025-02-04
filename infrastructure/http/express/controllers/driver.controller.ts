@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/controllers/driver.controller.ts
 import { Request, Response, NextFunction } from "express";
 import { RepositoryFactory } from "../../../config/RepositoryFactory";
 import { DriverRepository } from "../../../../application/repositories/DriverRepository";

@@ -37,7 +37,6 @@ describe("ListAllMotorcycles Integration", () => {
   });
 
   it("should return all existing motorcycles", async () => {
-    // Créer plusieurs motos
     await addMotorcycle.execute(
       "1HGCM82633A123456",
       "Triumph Street Triple",

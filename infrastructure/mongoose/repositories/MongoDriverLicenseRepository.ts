@@ -19,7 +19,6 @@ export class MongoDriverLicenseRepository implements DriverLicenseRepository {
     const existingLicense = await this.findById(driverLicense.id);
 
     if (existingLicense) {
-      // Mise à jour d'une licence existante
       await this.companyModel.updateOne(
         { "drivers.driverLicense.id": driverLicense.id },
         {
@@ -36,7 +35,6 @@ export class MongoDriverLicenseRepository implements DriverLicenseRepository {
         }
       );
     } else {
-      // Nouvelle licence
       await this.companyModel.updateOne(
         { "drivers.id": driverId },
         {
@@ -67,7 +65,6 @@ export class MongoDriverLicenseRepository implements DriverLicenseRepository {
 
     const license = company.drivers[0].driverLicense;
 
-    // S'assurer que categories est bien un tableau de strings
     const categoryStrings = Array.isArray(license.categories)
       ? license.categories
       : [];
@@ -99,7 +96,6 @@ export class MongoDriverLicenseRepository implements DriverLicenseRepository {
 
     const license = company.drivers[0].driverLicense;
 
-    // Même traitement des catégories que dans findById
     const categoryStrings = Array.isArray(license.categories)
       ? license.categories
       : [];
@@ -120,10 +116,8 @@ export class MongoDriverLicenseRepository implements DriverLicenseRepository {
   }
 
   async delete(id: string): Promise<void> {
-    // D'abord, faisons une requête plus large pour voir la structure
     const allCompanies = await this.companyModel.find({});
 
-    // Ensuite tentons de trouver spécifiquement la company avec ce driver
     const companyWithDriver = await this.companyModel.findOne({
       drivers: {
         $elemMatch: {

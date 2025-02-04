@@ -32,7 +32,6 @@ describe("RemoveMotorcycle Integration", () => {
   beforeEach(async () => {
     await MotorcycleModel.destroy({ where: {} });
 
-    // Créer une moto de test
     await addMotorcycle.execute(
       "1HGCM82633A123456",
       "Triumph Street Triple",
@@ -55,7 +54,6 @@ describe("RemoveMotorcycle Integration", () => {
 
     expect(result).toBeUndefined();
 
-    // Vérifier que la moto a été supprimée
     const motorcycles = await motorcycleRepository.findAll();
     expect(motorcycles).toHaveLength(0);
   });

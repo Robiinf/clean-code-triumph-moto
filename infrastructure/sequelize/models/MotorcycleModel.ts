@@ -1,4 +1,3 @@
-// infrastructure/sequelize/models/MotorcycleModel.ts
 import { Model, DataTypes, Sequelize } from "sequelize";
 
 export class MotorcycleModel extends Model {

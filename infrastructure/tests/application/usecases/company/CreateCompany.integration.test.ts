@@ -23,12 +23,10 @@ describe("CreateCompany Integration", () => {
   });
 
   beforeEach(async () => {
-    // Nettoyer la collection avant chaque test
     await repository["companyModel"].deleteMany({});
   });
 
   it("should successfully create a company with valid data", async () => {
-    // Arrange
     const validCompanyData = {
       name: "Test Company",
       siret: "73282932000074",
@@ -39,7 +37,6 @@ describe("CreateCompany Integration", () => {
       country: "Test Country",
     };
 
-    // Act
     await createCompany.execute(
       validCompanyData.name,
       validCompanyData.siret,
@@ -50,7 +47,6 @@ describe("CreateCompany Integration", () => {
       validCompanyData.country
     );
 
-    // Assert
     const companies = await repository.findAll();
     expect(companies).toHaveLength(1);
     expect(companies[0].name).toBe(validCompanyData.name);
@@ -63,9 +59,8 @@ describe("CreateCompany Integration", () => {
   });
 
   it("should return error when company name is too short", async () => {
-    // Arrange
     const invalidCompanyData = {
-      name: "Te", // Nom trop court
+      name: "Te",
       siret: "12345678901234",
       phone: "0123456789",
       address: "123 Test Street",
@@ -74,7 +69,6 @@ describe("CreateCompany Integration", () => {
       country: "Test Country",
     };
 
-    // Act
     const result = await createCompany.execute(
       invalidCompanyData.name,
       invalidCompanyData.siret,
@@ -85,17 +79,15 @@ describe("CreateCompany Integration", () => {
       invalidCompanyData.country
     );
 
-    // Assert
     expect(result).toBeInstanceOf(CompanyNameTooShortError);
     const companies = await repository.findAll();
-    expect(companies).toHaveLength(0); // Vérifier qu'aucune company n'a été créée
+    expect(companies).toHaveLength(0);
   });
 
   it("should return error when SIRET is invalid", async () => {
-    // Arrange
     const invalidCompanyData = {
       name: "Test Company",
-      siret: "invalid-siret", // SIRET invalide
+      siret: "invalid-siret",
       phone: "0123456789",
       address: "123 Test Street",
       city: "Test City",
@@ -103,7 +95,6 @@ describe("CreateCompany Integration", () => {
       country: "Test Country",
     };
 
-    // Act
     const result = await createCompany.execute(
       invalidCompanyData.name,
       invalidCompanyData.siret,
@@ -114,7 +105,6 @@ describe("CreateCompany Integration", () => {
       invalidCompanyData.country
     );
 
-    // Assert
     expect(result).toBeInstanceOf(InvalidSiretError);
     const companies = await repository.findAll();
     expect(companies).toHaveLength(0);
