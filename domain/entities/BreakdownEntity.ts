@@ -1,15 +1,17 @@
+import crypto from "crypto";
+import { BreakdownType } from "../types/BreakdownType";
 export class BreakdownEntity {
-  private constructor(
+  constructor(
     public id: string,
     public breakdownDate: Date,
-    public breakdownType: string,
+    public breakdownType: BreakdownType,
     public breakdownDescription: string,
     public motorcycleId: string
   ) {}
 
   public static create(
     breakdownDate: Date,
-    breakdownType: string,
+    breakdownType: BreakdownType,
     breakdownDescription: string,
     motorcycleId: string
   ): BreakdownEntity {
