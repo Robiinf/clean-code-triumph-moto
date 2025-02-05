@@ -3,12 +3,14 @@ import { TestDriveModel } from "./TestDriveModel";
 import { BreakdownModel } from "./BreakdownModel";
 import { WarrantyModel } from "./WarrantyModel";
 import { RentalModel } from "./RentalModel";
+import { SparePartModel } from "./SparePartModel";
 
 export const initializeModels = (sequelize: Sequelize): void => {
   TestDriveModel.initModel(sequelize);
   BreakdownModel.initModel(sequelize);
   WarrantyModel.initModel(sequelize);
   RentalModel.initModel(sequelize);
+  SparePartModel.initModel(sequelize);
 };
 
 export const synchronizeModels = async (
@@ -19,6 +21,7 @@ export const synchronizeModels = async (
     BreakdownModel,
     WarrantyModel,
     RentalModel,
+    SparePartModel,
   ];
 
   for (const model of modelSyncOrder) {

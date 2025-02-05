@@ -10,6 +10,7 @@ import { breakdownRoutes } from "./routes/breakdown.routes";
 import { initializeModels, synchronizeModels } from "../../sequelize/models";
 import { warrantyRoutes } from "./routes/warranty.routes";
 import { rentalRoutes } from "./routes/rental.routes";
+import { sparePartRoutes } from "./routes/sparePart.routes";
 
 export class ExpressServer implements ServerInterface {
   private app: Express;
@@ -39,6 +40,7 @@ export class ExpressServer implements ServerInterface {
       this.app.use("/api", breakdownRoutes());
       this.app.use("/api", warrantyRoutes());
       this.app.use("/api", rentalRoutes());
+      this.app.use("/api", sparePartRoutes());
 
       this.app.get("/health", (req, res) => {
         res.send("Server is up and running");

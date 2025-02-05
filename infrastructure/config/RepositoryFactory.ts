@@ -8,6 +8,7 @@ import { SequelizeTestDriveRepository } from "../sequelize/repositories/Sequeliz
 import { SequelizeBreakdownRepository } from "../sequelize/repositories/SequelizeBreakdownRepository";
 import { SequelizeWarrantyRepository } from "../sequelize/repositories/SequelizeWarrantyRepository";
 import { SequelizeRentalRepository } from "../sequelize/repositories/SequelizeRentalRepository";
+import { SequelizeSparePartRepository } from "../sequelize/repositories/SequelizeSparePartRepository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -88,6 +89,11 @@ export class RepositoryFactory {
         break;
       case "RentalEntity":
         repository = new SequelizeRentalRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
+        break;
+      case "SparePartEntity":
+        repository = new SequelizeSparePartRepository(
           this.databaseConnector.getSequelizeConnection()
         );
         break;

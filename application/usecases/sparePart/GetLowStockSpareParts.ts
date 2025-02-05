@@ -1,10 +1,10 @@
 import { SparePartEntity } from "../../../domain/entities/SparePartEntity";
 import { SparePartRepository } from "../../repositories/SparePartRepository";
 
-export class EditSparePart {
+export class GetLowStockSpareParts {
   constructor(private sparePartRepository: SparePartRepository) {}
 
-  async execute(sparePart: SparePartEntity): Promise<void> {
-    await this.sparePartRepository.editSparePart(sparePart);
+  async execute(): Promise<SparePartEntity[]> {
+    return this.sparePartRepository.findLowStock();
   }
 }
