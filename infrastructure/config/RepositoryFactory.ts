@@ -5,6 +5,7 @@ import { DatabaseConnector } from "./DatabaseConfig";
 import { SequelizeMotorcycleRepository } from "../sequelize/repositories/SequelizeMotorcycleRepository";
 import { MongoIncidentRepository } from "../mongoose/repositories/MongoIncidentRepository";
 import { SequelizeTestDriveRepository } from "../sequelize/repositories/SequelizeTestDriveRepository";
+import { SequelizeBreakdownRepository } from "../sequelize/repositories/SequelizeBreakdownRepository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -73,7 +74,11 @@ export class RepositoryFactory {
           this.databaseConnector.getSequelizeConnection()
         );
         break;
-
+      case "BreakdownEntity":
+        repository = new SequelizeBreakdownRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
+        break;
       default:
         throw new Error("Repository not found");
     }
