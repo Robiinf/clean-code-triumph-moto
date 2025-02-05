@@ -7,6 +7,8 @@ import { MongoIncidentRepository } from "../mongoose/repositories/MongoIncidentR
 import { SequelizeTestDriveRepository } from "../sequelize/repositories/SequelizeTestDriveRepository";
 import { SequelizeBreakdownRepository } from "../sequelize/repositories/SequelizeBreakdownRepository";
 import { SequelizeWarrantyRepository } from "../sequelize/repositories/SequelizeWarrantyRepository";
+import { SequelizeOrderRepository } from "../sequelize/repositories/SequelizeOrderRepository";
+import { SequelizeOrderLineRepository } from "../sequelize/repositories/SequelizeOrderLineRepository";
 import { SequelizeRentalRepository } from "../sequelize/repositories/SequelizeRentalRepository";
 import { SequelizeSparePartRepository } from "../sequelize/repositories/SequelizeSparePartRepository";
 
@@ -94,6 +96,16 @@ export class RepositoryFactory {
         break;
       case "SparePartEntity":
         repository = new SequelizeSparePartRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
+        break;
+      case "OrderEntity":
+        repository = new SequelizeOrderRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
+        break;
+      case "OrderLineEntity":
+        repository = new SequelizeOrderLineRepository(
           this.databaseConnector.getSequelizeConnection()
         );
         break;

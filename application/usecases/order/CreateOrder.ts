@@ -1,10 +1,14 @@
-import { OrderEntity } from "../../../domain/entities/OrderEntity";
 import { OrderRepository } from "../../repositories/OrderRepository";
 import { SparePartRepository } from "../../repositories/SparePartRepository";
+import { OrderEntity } from "../../../domain/entities/OrderEntity";
+import { OrderLineEntity } from "../../../domain/entities/OrderLineEntity";
 import { SparePartNotFound } from "../../../domain/errors/SparePartNotFound";
-import { NegativeOrderQuantityError } from "../../../domain/errors/NegativeOrderQuantityError";
-import { NegativeUnitPriceError } from "../../../domain/errors/NegativeUnitPriceError";
-import { DeliveryDateBeforeOrderDateError } from "../../../domain/errors/DeliveryDateBeforeOrderDateError";
+import { NegativeStockError } from "../../../domain/errors/NegativeStockError";
+
+type OrderLineInput = {
+  sparePartId: string;
+  quantity: number;
+};
 
 export class CreateOrder {
   constructor(
@@ -12,38 +16,45 @@ export class CreateOrder {
     private sparePartRepository: SparePartRepository
   ) {}
 
-  public async execute(
-    orderDate: Date,
-    sparePartId: string,
-    quantity: number,
-    unitPrice: number,
-    deliveryDate?: Date
-  ) {
-    const sparePart = await this.sparePartRepository.findById(sparePartId);
-    if (!sparePart) {
-      return new SparePartNotFound();
+  async execute(orderLines: OrderLineInput[]): Promise<OrderEntity | Error> {
+    const orderLinesEntities: OrderLineEntity[] = [];
+
+    for (const line of orderLines) {
+      const sparePart = await this.sparePartRepository.findById(
+        line.sparePartId
+      );
+      if (!sparePart) {
+        return new SparePartNotFound();
+      }
+      if (sparePart.stockQuantity < line.quantity) {
+        return new NegativeStockError();
+      }
+
+      const orderLine = OrderLineEntity.create(
+        "",
+        line.sparePartId,
+        line.quantity,
+        sparePart!.unitPrice
+      );
+      orderLinesEntities.push(orderLine);
     }
 
-    if (deliveryDate && deliveryDate < orderDate) {
-      return new DeliveryDateBeforeOrderDateError();
-    }
+    const order = OrderEntity.create(orderLinesEntities);
 
-    if (quantity <= 0) {
-      return new NegativeOrderQuantityError();
-    }
-
-    if (unitPrice <= 0) {
-      return new NegativeUnitPriceError();
-    }
-
-    const order = OrderEntity.create(
-      orderDate,
-      sparePartId,
-      quantity,
-      unitPrice,
-      deliveryDate
-    );
+    order.orderLines.forEach((line) => (line.orderId = order.id));
 
     await this.orderRepository.save(order);
+
+    for (const line of orderLines) {
+      const sparePart = await this.sparePartRepository.findById(
+        line.sparePartId
+      );
+      await this.sparePartRepository.updateStockQuantity(
+        line.sparePartId,
+        sparePart!.stockQuantity - line.quantity
+      );
+    }
+
+    return order;
   }
 }

@@ -1,31 +1,46 @@
+import crypto from "crypto";
+import { OrderLineEntity } from "./OrderLineEntity";
+
+export type OrderStatus = "pending" | "confirmed" | "delivered" | "cancelled";
+
 export class OrderEntity {
-  constructor(
+  private constructor(
     public id: string,
     public orderDate: Date,
-    public orderStatus: string,
-    public sparePartId: string,
-    public quantity: number,
-    public unitPrice: number,
-    public deliveryDate?: Date
+    public status: OrderStatus,
+    public totalAmount: number,
+    public orderLines: OrderLineEntity[]
   ) {}
 
-  public static create(
-    orderDate: Date,
-    sparePartId: string,
-    quantity: number,
-    unitPrice: number,
-    deliveryDate?: Date
-  ): OrderEntity {
+  public static create(orderLines: OrderLineEntity[]): OrderEntity {
     const id = crypto.randomUUID();
-    const orderStatus = "PENDING";
+    const orderDate = new Date();
+    const status: OrderStatus = "pending";
+    const totalAmount = orderLines.reduce(
+      (sum, line) => sum + line.unitPrice * line.quantity,
+      0
+    );
+
+    return new OrderEntity(id, orderDate, status, totalAmount, orderLines);
+  }
+
+  public static restore(
+    id: string,
+    orderDate: Date,
+    status: OrderStatus,
+    totalAmount: number,
+    orderLines: OrderLineEntity[]
+  ): OrderEntity {
+    return new OrderEntity(id, orderDate, status, totalAmount, orderLines);
+  }
+
+  public updateStatus(newStatus: OrderStatus): OrderEntity {
     return new OrderEntity(
-      id,
-      orderDate,
-      orderStatus,
-      sparePartId,
-      quantity,
-      unitPrice,
-      deliveryDate
+      this.id,
+      this.orderDate,
+      newStatus,
+      this.totalAmount,
+      this.orderLines
     );
   }
 }
