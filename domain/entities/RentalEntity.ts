@@ -1,6 +1,5 @@
-import { InvalidRentalDate } from "../errors/InvalidRentalDate";
-import { NegativeDailyRateError } from "../errors/NegativeDailyRateError";
-import { InvalidRentalReturnDate } from "../errors/InvalidRentalReturnDate";
+import crypto from "crypto";
+import { InvalidDateImpossible } from "../errors/InvalidDateImpossible";
 
 const calculateRentalStatus = (
   rentalEndDate: Date,
@@ -18,7 +17,7 @@ const calculateRentalStatus = (
 };
 
 export class RentalEntity {
-  private constructor(
+  constructor(
     public id: string,
     public motorcycleId: string,
     public renterId: string,
@@ -50,6 +49,25 @@ export class RentalEntity {
       dailyRate,
       rentalStatus,
       returnDate ? returnDate : null
+    );
+  }
+
+  public update(returnDate: Date): RentalEntity | InvalidDateImpossible {
+    if (returnDate < this.rentalStartDate) {
+      return new InvalidDateImpossible();
+    }
+
+    const rentalStatus = calculateRentalStatus(this.rentalEndDate, returnDate);
+
+    return new RentalEntity(
+      this.id,
+      this.motorcycleId,
+      this.renterId,
+      this.rentalStartDate,
+      this.rentalEndDate,
+      this.dailyRate,
+      rentalStatus,
+      returnDate
     );
   }
 }

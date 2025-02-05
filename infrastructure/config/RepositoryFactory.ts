@@ -7,6 +7,7 @@ import { MongoIncidentRepository } from "../mongoose/repositories/MongoIncidentR
 import { SequelizeTestDriveRepository } from "../sequelize/repositories/SequelizeTestDriveRepository";
 import { SequelizeBreakdownRepository } from "../sequelize/repositories/SequelizeBreakdownRepository";
 import { SequelizeWarrantyRepository } from "../sequelize/repositories/SequelizeWarrantyRepository";
+import { SequelizeRentalRepository } from "../sequelize/repositories/SequelizeRentalRepository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -82,6 +83,11 @@ export class RepositoryFactory {
         break;
       case "WarrantyEntity":
         repository = new SequelizeWarrantyRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
+        break;
+      case "RentalEntity":
+        repository = new SequelizeRentalRepository(
           this.databaseConnector.getSequelizeConnection()
         );
         break;
