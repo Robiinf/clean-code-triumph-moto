@@ -8,6 +8,7 @@ import { incidentRoutes } from "./routes/incident.routes";
 import { testDriveRoutes } from "./routes/testDrive.routes";
 import { breakdownRoutes } from "./routes/breakdown.routes";
 import { initializeModels, synchronizeModels } from "../../sequelize/models";
+import { warrantyRoutes } from "./routes/warranty.routes";
 
 export class ExpressServer implements ServerInterface {
   private app: Express;
@@ -36,6 +37,7 @@ export class ExpressServer implements ServerInterface {
       this.app.use("/api", incidentRoutes());
       this.app.use("/api", testDriveRoutes());
       this.app.use("/api", breakdownRoutes());
+      this.app.use("/api", warrantyRoutes());
 
       this.app.get("/health", (req, res) => {
         res.send("Server is up and running");

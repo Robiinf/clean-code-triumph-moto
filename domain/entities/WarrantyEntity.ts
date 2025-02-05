@@ -1,7 +1,6 @@
-import { WarrantyInvalidDate } from "../errors/WarrantyInvalidDate";
-
+import crypto from "crypto";
 export class WarrantyEntity {
-  private constructor(
+  constructor(
     public id: string,
     public startDate: Date,
     public endDate: Date,
@@ -19,7 +18,6 @@ export class WarrantyEntity {
     warrantyDescription: string
   ): WarrantyEntity {
     const id = crypto.randomUUID();
-
     const warrantyStatus = "active";
 
     return new WarrantyEntity(
