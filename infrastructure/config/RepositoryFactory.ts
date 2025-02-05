@@ -11,6 +11,7 @@ import { SequelizeOrderRepository } from "../sequelize/repositories/SequelizeOrd
 import { SequelizeOrderLineRepository } from "../sequelize/repositories/SequelizeOrderLineRepository";
 import { SequelizeRentalRepository } from "../sequelize/repositories/SequelizeRentalRepository";
 import { SequelizeSparePartRepository } from "../sequelize/repositories/SequelizeSparePartRepository";
+import { SequelizeMaintenanceRecursionRepository } from "../sequelize/repositories/SequelizeMaintenanceRecursionRepository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -106,6 +107,11 @@ export class RepositoryFactory {
         break;
       case "OrderLineEntity":
         repository = new SequelizeOrderLineRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
+        break;
+      case "MaintenanceRecursionEntity":
+        repository = new SequelizeMaintenanceRecursionRepository(
           this.databaseConnector.getSequelizeConnection()
         );
         break;

@@ -12,6 +12,7 @@ import { warrantyRoutes } from "./routes/warranty.routes";
 import { rentalRoutes } from "./routes/rental.routes";
 import { sparePartRoutes } from "./routes/sparePart.routes";
 import { orderRoutes } from "./routes/order.routes";
+import { maintenanceRecursionRoutes } from "./routes/maintenanceRecursion.routes";
 
 export class ExpressServer implements ServerInterface {
   private app: Express;
@@ -43,6 +44,7 @@ export class ExpressServer implements ServerInterface {
       this.app.use("/api", rentalRoutes());
       this.app.use("/api", sparePartRoutes());
       this.app.use("/api", orderRoutes());
+      this.app.use("/api", maintenanceRecursionRoutes());
 
       this.app.get("/health", (req, res) => {
         res.send("Server is up and running");
