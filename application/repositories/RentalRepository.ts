@@ -6,4 +6,9 @@ export interface RentalRepository {
   findById(id: string): Promise<RentalEntity | null>;
   findByMotorcycle(id: string): Promise<RentalEntity[]>;
   findByDriver(id: string): Promise<RentalEntity[]>;
+  findOverlappingRentals(
+    motorcycleId: string,
+    startDate: Date,
+    endDate: Date
+  ): Promise<RentalEntity[]>;
 }
