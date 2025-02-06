@@ -1,4 +1,5 @@
 import express, { Express } from "express";
+import cors from "cors";
 import { ServerInterface } from "../ServerInterface";
 import { DatabaseConnector } from "../../config/DatabaseConfig";
 import { companyRoutes } from "./routes/company.routes";
@@ -33,6 +34,7 @@ export class ExpressServer implements ServerInterface {
       initializeModels(sequelize);
       await synchronizeModels(sequelize);
 
+      this.app.use(cors());
       this.app.use(express.json());
 
       this.app.use("/api", companyRoutes());

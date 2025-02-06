@@ -15,11 +15,11 @@ import { LuWrench } from "react-icons/lu";
 interface Company {
   name: string;
   siret: string;
-  type: string;
+  phone: string;
   address: string;
 }
 
-const data = [
+/* const data = [
   {
     name: "Company 1",
     siret: "123456789",
@@ -38,7 +38,7 @@ const data = [
     type: "SAS",
     address: "3 rue de la paix",
   },
-];
+]; */
 
 export const Company = () => {
   const [companies, setCompanies] = React.useState<Company[]>([]);
@@ -50,7 +50,17 @@ export const Company = () => {
   >(null);
 
   useEffect(() => {
-    setCompanies(data);
+    const fetchCompanies = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/companies");
+        const data = await response.json();
+        setCompanies(data.data);
+      } catch (error) {
+        console.error("Erreur lors du chargement des entreprises :", error);
+      }
+    };
+
+    fetchCompanies();
   }, []);
 
   const openDialog = (
@@ -72,8 +82,12 @@ export const Company = () => {
       header: "Nom",
     },
     {
-      accessorKey: "type",
-      header: "Type",
+      accessorKey: "siret",
+      header: "Siret",
+    },
+    {
+      accessorKey: "phone",
+      header: "Phone",
     },
     {
       accessorKey: "address",
