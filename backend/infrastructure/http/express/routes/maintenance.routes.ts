@@ -1,0 +1,20 @@
+import { Router } from "express";
+import { MaintenanceController } from "../controllers/maintenance.controller";
+
+export const maintenanceRoutes = () => {
+  const router = Router();
+  const controller = new MaintenanceController();
+
+  router.post("/maintenances", controller.createMaintenance);
+  router.put("/maintenances/:id", controller.updateMaintenance);
+  router.get(
+    "/motorcycles/:motorcycleId/maintenances",
+    controller.getMaintenancesByMotorcycle
+  );
+  router.get(
+    "/breakdowns/:breakdownId/maintenance",
+    controller.getMaintenanceByBreakdown
+  );
+
+  return router;
+};
