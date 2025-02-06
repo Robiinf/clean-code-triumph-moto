@@ -1,10 +1,9 @@
 import { MaintenanceEntity } from "../../domain/entities/MaintenanceEntity";
 
 export interface MaintenanceRepository {
-  createMaintenance(maintenance: MaintenanceEntity): Promise<MaintenanceEntity>;
-  editMaintenance(maintenance: MaintenanceEntity): Promise<MaintenanceEntity>;
-  addRecommendation(
-    maintenance: MaintenanceEntity,
-    recommendation: string
-  ): Promise<MaintenanceEntity>;
+  save(maintenance: MaintenanceEntity): Promise<void>;
+  findById(id: string): Promise<MaintenanceEntity | null>;
+  findByMotorcycle(motorcycleId: string): Promise<MaintenanceEntity[]>;
+  findByBreakdown(breakdownId: string): Promise<MaintenanceEntity | null>;
 }
+

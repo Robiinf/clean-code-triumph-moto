@@ -7,6 +7,8 @@ import { SparePartModel } from "./SparePartModel";
 import { OrderModel } from "./OrderModel";
 import { OrderLineModel } from "./OrderLineModel";
 import { MaintenanceRecursionModel } from "./MaintenanceRecursionModel";
+import { MaintenanceModel } from "./MaintenanceModel";
+import { ReplacedPartModel } from "./ReplacedPartModel";
 
 export const initializeModels = (sequelize: Sequelize): void => {
   TestDriveModel.initModel(sequelize);
@@ -17,6 +19,8 @@ export const initializeModels = (sequelize: Sequelize): void => {
   OrderModel.initModel(sequelize);
   OrderLineModel.initModel(sequelize);
   MaintenanceRecursionModel.initModel(sequelize);
+  MaintenanceModel.initModel(sequelize);
+  ReplacedPartModel.initModel(sequelize);
 };
 
 export const synchronizeModels = async (
@@ -31,6 +35,8 @@ export const synchronizeModels = async (
     OrderModel,
     OrderLineModel,
     MaintenanceRecursionModel,
+    MaintenanceModel,
+    ReplacedPartModel,
   ];
 
   for (const model of modelSyncOrder) {

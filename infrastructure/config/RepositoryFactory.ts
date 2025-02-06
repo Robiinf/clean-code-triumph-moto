@@ -12,6 +12,7 @@ import { SequelizeOrderLineRepository } from "../sequelize/repositories/Sequeliz
 import { SequelizeRentalRepository } from "../sequelize/repositories/SequelizeRentalRepository";
 import { SequelizeSparePartRepository } from "../sequelize/repositories/SequelizeSparePartRepository";
 import { SequelizeMaintenanceRecursionRepository } from "../sequelize/repositories/SequelizeMaintenanceRecursionRepository";
+import { SequelizeMaintenanceRepository } from "../sequelize/repositories/SequelizeMaintenanceRepository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -115,8 +116,13 @@ export class RepositoryFactory {
           this.databaseConnector.getSequelizeConnection()
         );
         break;
+      case "MaintenanceEntity":
+        repository = new SequelizeMaintenanceRepository(
+          this.databaseConnector.getSequelizeConnection()
+        );
+        break;
       default:
-        throw new Error("Repository not found");
+        throw new Error("Repository not found : " + entityName);
     }
 
     this.repositories.set(entityName, repository);
