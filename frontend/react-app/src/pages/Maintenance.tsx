@@ -1,3 +1,5 @@
+{
+  /*  
 import { DataTable } from "@/components/DataTable";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ColumnDef } from "@tanstack/react-table";
@@ -12,7 +14,7 @@ import {
 } from "react-icons/md";
 
 //Entity
-import { MaintenanceEntity } from "../../../../../domain/entities/MaintenanceEntity";
+import { MaintenanceEntity } from "../../../../../domain/entities/maintenance";
 import { Mileage } from "../../../../../domain/types/mileage";
 import { Button } from "@/components/ui/button";
 
@@ -87,7 +89,6 @@ const Maintenance = () => {
         const maintenance = row.original;
         return (
           <div className="flex justify-end space-x-2">
-            {/* Bouton Voir */}
             <button
               className="text-green-500"
               onClick={() => openDialog(maintenance, "view")}
@@ -95,7 +96,6 @@ const Maintenance = () => {
               <MdOutlineRemoveRedEye />
             </button>
 
-            {/* Bouton Modifier */}
             <button
               className="text-sky-500"
               onClick={() => openDialog(maintenance, "edit")}
@@ -103,7 +103,6 @@ const Maintenance = () => {
               <MdOutlineModeEdit />
             </button>
 
-            {/* Bouton Pannes */}
             <button
               className="text-orange-500"
               onClick={() => openDialog(maintenance, "breakdown")}
@@ -111,7 +110,7 @@ const Maintenance = () => {
               <LuWrench />
             </button>
 
-            {/* Bouton Supprimer */}
+
             <button
               className="text-rose-500"
               onClick={() => openDialog(maintenance, "delete")}
@@ -135,7 +134,7 @@ const Maintenance = () => {
       <div className="w-full py-8">
         <DataTable columns={columns} data={maintenances} />
       </div>
-      {/* Dialog avec contenu conditionnel */}
+
       <Dialog open={!!actionType} onOpenChange={closeDialog}>
         <DialogContent>
           {selectedMaintenance && actionType === "breakdown" && <div></div>}
@@ -153,14 +152,14 @@ const Maintenance = () => {
           {selectedMaintenance && actionType === "edit" && (
             <div>
               <h2 className="text-lg font-bold">Modifier la maintenance</h2>
-              {/* Ajoute ici un formulaire pour modifier la moto */}
+
             </div>
           )}
 
           {actionType === "add" && (
             <div>
               <h2 className="text-lg font-bold">Ajouter une Maintenance</h2>
-              {/* Ajoute ici un formulaire pour modifier la moto */}
+
             </div>
           )}
 
@@ -191,4 +190,5 @@ const Maintenance = () => {
   );
 };
 
-export default Maintenance;
+export default Maintenance; */
+}
