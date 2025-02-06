@@ -52,7 +52,7 @@ export class UpdateMaintenance {
       existingMaintenance.id,
       existingMaintenance.motorcycleId,
       existingMaintenance.maintenanceDate,
-      existingMaintenance.maintenancetype,
+      existingMaintenance.maintenanceType,
       description,
       techniciansRecommendation,
       existingMaintenance.currentMotorcycleMileage,

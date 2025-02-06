@@ -7,6 +7,7 @@ export const maintenanceRoutes = () => {
 
   router.post("/maintenances", controller.createMaintenance);
   router.put("/maintenances/:id", controller.updateMaintenance);
+  router.get("/maintenances", controller.getMaintenances);
   router.get(
     "/motorcycles/:motorcycleId/maintenances",
     controller.getMaintenancesByMotorcycle

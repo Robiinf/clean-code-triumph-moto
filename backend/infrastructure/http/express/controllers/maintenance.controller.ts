@@ -6,6 +6,7 @@ import { SparePartRepository } from "../../../../application/repositories/SpareP
 import { CreateMaintenance } from "../../../../application/usecases/maintenance/CreateMaintenance";
 import { UpdateMaintenance } from "../../../../application/usecases/maintenance/UpdateMaintenance";
 import { GetMaintenancesByMotorcycle } from "../../../../application/usecases/maintenance/GetMaintenancesByMotorcycle";
+import { GetMaintenances } from "../../../../application/usecases/maintenance/GetMaintenances";
 import { GetMaintenanceByBreakdown } from "../../../../application/usecases/maintenance/GetMaintenanceByBreakdown";
 import { ZodMaintenanceValidator } from "../../validation/implementations/zod/ZodMaintenanceValidator";
 import { MaintenanceRecursionRepository } from "../../../../application/repositories/MaintenanceRecursionRepository";
@@ -125,6 +126,26 @@ export class MaintenanceController {
       res.status(200).json({
         status: "success",
         data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getMaintenances = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const getMaintenancesUseCase = new GetMaintenances(
+        this.maintenanceRepository
+      );
+      const maintenances = await getMaintenancesUseCase.execute();
+
+      res.status(200).json({
+        status: "success",
+        data: maintenances,
       });
     } catch (error) {
       next(error);

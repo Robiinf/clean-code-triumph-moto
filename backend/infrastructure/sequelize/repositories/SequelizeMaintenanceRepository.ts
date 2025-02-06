@@ -34,7 +34,7 @@ export class SequelizeMaintenanceRepository implements MaintenanceRepository {
           id: maintenance.id,
           motorcycleId: maintenance.motorcycleId,
           maintenanceDate: maintenance.maintenanceDate,
-          maintenancetype: maintenance.maintenancetype.value,
+          maintenanceType: maintenance.maintenanceType.value,
           description: maintenance.description,
           techniciansRecommendation: maintenance.techniciansRecommendation,
           currentMotorcycleMileage: maintenance.currentMotorcycleMileage.value,
@@ -70,7 +70,7 @@ export class SequelizeMaintenanceRepository implements MaintenanceRepository {
 
     const replacedParts = await this.getReplacedParts(id);
     const mileage = Mileage.from(maintenance.currentMotorcycleMileage);
-    const maintenanceType = MaintenanceType.from(maintenance.maintenancetype);
+    const maintenanceType = MaintenanceType.from(maintenance.maintenanceType);
 
     if (mileage instanceof Error || maintenanceType instanceof Error) {
       throw new Error("Invalid data in database");
@@ -90,6 +90,38 @@ export class SequelizeMaintenanceRepository implements MaintenanceRepository {
     );
   }
 
+  async find(): Promise<MaintenanceEntity[]> {
+    const maintenances = await MaintenanceModel.findAll();
+    const result: MaintenanceEntity[] = [];
+
+    for (const maintenance of maintenances) {
+      const replacedParts = await this.getReplacedParts(maintenance.id);
+      const mileage = Mileage.from(maintenance.currentMotorcycleMileage);
+      const maintenanceType = MaintenanceType.from(maintenance.maintenanceType);
+
+      if (mileage instanceof Error || maintenanceType instanceof Error) {
+        throw new Error("Invalid data in database");
+      }
+
+      result.push(
+        MaintenanceEntity.restore(
+          maintenance.id,
+          maintenance.motorcycleId,
+          maintenance.maintenanceDate,
+          maintenanceType,
+          maintenance.description,
+          maintenance.techniciansRecommendation,
+          mileage,
+          replacedParts,
+          maintenance.breakdownId,
+          maintenance.maintenanceRecursionId
+        )
+      );
+    }
+
+    return result;
+  }
+
   async findByMotorcycle(motorcycleId: string): Promise<MaintenanceEntity[]> {
     const maintenances = await MaintenanceModel.findAll({
       where: { motorcycleId },
@@ -99,7 +131,7 @@ export class SequelizeMaintenanceRepository implements MaintenanceRepository {
     for (const maintenance of maintenances) {
       const replacedParts = await this.getReplacedParts(maintenance.id);
       const mileage = Mileage.from(maintenance.currentMotorcycleMileage);
-      const maintenanceType = MaintenanceType.from(maintenance.maintenancetype);
+      const maintenanceType = MaintenanceType.from(maintenance.maintenanceType);
 
       if (mileage instanceof Error || maintenanceType instanceof Error) {
         throw new Error("Invalid data in database");
@@ -136,7 +168,7 @@ export class SequelizeMaintenanceRepository implements MaintenanceRepository {
 
     const replacedParts = await this.getReplacedParts(maintenance.id);
     const mileage = Mileage.from(maintenance.currentMotorcycleMileage);
-    const maintenanceType = MaintenanceType.from(maintenance.maintenancetype);
+    const maintenanceType = MaintenanceType.from(maintenance.maintenanceType);
 
     if (mileage instanceof Error || maintenanceType instanceof Error) {
       throw new Error("Invalid data in database");

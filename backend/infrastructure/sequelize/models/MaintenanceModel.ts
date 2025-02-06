@@ -4,7 +4,7 @@ export class MaintenanceModel extends Model {
   public id!: string;
   public motorcycleId!: string;
   public maintenanceDate!: Date;
-  public maintenancetype!: string;
+  public maintenanceType!: string;
   public description!: string;
   public techniciansRecommendation!: string;
   public currentMotorcycleMileage!: number;
@@ -31,7 +31,7 @@ export class MaintenanceModel extends Model {
           type: DataTypes.DATE,
           allowNull: false,
         },
-        maintenancetype: {
+        maintenanceType: {
           type: DataTypes.STRING,
           allowNull: false,
         },
