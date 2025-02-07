@@ -4,6 +4,7 @@ import { MotorcycleRepository } from "../../repositories/MotorcycleRepository";
 import { VehicleNotFound } from "../../../domain/errors/VehicleNotFound";
 import { BreakdownFutureDateNotAllowed } from "../../../domain/errors/BreakdownFutureDateNotAllowed";
 import { BreakdownType } from "../../../domain/types/BreakdownType";
+import { InvalidBreakdownType } from "../../../domain/errors/InvalidBreakdownType";
 
 export class CreateBreakdownReport {
   constructor(
@@ -16,7 +17,12 @@ export class CreateBreakdownReport {
     breakdownType: string,
     breakdownDescription: string,
     motorcycleId: string
-  ) {
+  ): Promise<
+    | void
+    | VehicleNotFound
+    | BreakdownFutureDateNotAllowed
+    | InvalidBreakdownType
+  > {
     const motorcycle = await this.motorcycleRepository.findById(motorcycleId);
     if (!motorcycle) {
       return new VehicleNotFound();

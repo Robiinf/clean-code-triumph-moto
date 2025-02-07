@@ -4,6 +4,7 @@ import type { DriverRepository } from "../../repositories/DriverRepository";
 import { LicenseCategory } from "../../../domain/types/LicenseCategory";
 import { InvalidLicenseDate } from "../../../domain/errors/InvalidLicenseDate";
 import { DriverNotFound } from "../../../domain/errors/DriverNotFound";
+import { InvalidLicenseCategory } from "../../../domain/errors/InvalidLicenseCategory";
 
 export class AddDriverLicense {
   public constructor(
@@ -18,7 +19,9 @@ export class AddDriverLicense {
     status: string,
     categories: string[],
     driverId: string
-  ) {
+  ): Promise<
+    void | DriverNotFound | InvalidLicenseDate | InvalidLicenseCategory
+  > {
     const driver = await this.driverRepository.findById(driverId);
     if (!driver) {
       return new DriverNotFound();

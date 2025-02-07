@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/controllers/rental.controller.ts
 import { Request, Response, NextFunction } from "express";
 import { RepositoryFactory } from "../../../config/RepositoryFactory";
 import { RentalRepository } from "../../../../application/repositories/RentalRepository";

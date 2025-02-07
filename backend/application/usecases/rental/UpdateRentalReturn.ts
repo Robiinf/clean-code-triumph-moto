@@ -4,7 +4,7 @@ import { NotFoundRentalError } from "../../../domain/errors/NotFoundRentalError"
 export class UpdateRentalReturn {
   constructor(private rentalRepository: RentalRepository) {}
 
-  async execute(id: string, returnDate: Date) {
+  async execute(id: string, returnDate: Date): Promise<void | Error> {
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {

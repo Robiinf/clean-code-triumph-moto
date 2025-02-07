@@ -1,4 +1,3 @@
-// src/infrastructure/http/express/controllers/order.controller.ts
 import { Request, Response, NextFunction } from "express";
 import { RepositoryFactory } from "../../../config/RepositoryFactory";
 import { OrderRepository } from "../../../../application/repositories/OrderRepository";

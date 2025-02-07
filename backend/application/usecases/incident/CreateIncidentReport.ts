@@ -17,7 +17,7 @@ export class CreateIncidentReport {
     motorcycleId: string,
     incidentDate: Date,
     incidentDetails: string
-  ) {
+  ): Promise<void | VehicleNotFound | DriverNotFound> {
     const driver = await this.driverRepository.findById(driverId);
     if (!driver) {
       return new DriverNotFound();

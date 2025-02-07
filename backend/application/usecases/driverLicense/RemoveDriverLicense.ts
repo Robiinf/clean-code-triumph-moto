@@ -9,7 +9,9 @@ export class RemoveDriverLicense {
     private readonly driverRepository: DriverRepository
   ) {}
 
-  public async execute(id: string) {
+  public async execute(
+    id: string
+  ): Promise<void | DriverLicenseNotFoundError | DriverNotFound> {
     const driverLicense = await this.driverLicenseRepository.findById(id);
     if (!driverLicense) {
       return new DriverLicenseNotFoundError();

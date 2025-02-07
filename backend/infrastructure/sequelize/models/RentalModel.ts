@@ -1,4 +1,3 @@
-// src/infrastructure/sequelize/models/express/RentalModel.ts
 import { Model, DataTypes, Sequelize } from "sequelize";
 
 export class RentalModel extends Model {

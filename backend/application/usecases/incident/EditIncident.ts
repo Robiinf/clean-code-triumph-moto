@@ -10,7 +10,7 @@ export class EditIncident {
     motorcycleId: string,
     incidentDate: Date,
     incidentDetails: string
-  ) {
+  ): Promise<void | IncidentNotFoundError> {
     const incident = await this.incidentRepository.findById(id);
     if (!incident) {
       return new IncidentNotFoundError();

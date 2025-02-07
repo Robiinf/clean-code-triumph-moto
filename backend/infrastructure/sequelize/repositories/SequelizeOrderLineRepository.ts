@@ -1,4 +1,3 @@
-// src/infrastructure/sequelize/repositories/SequelizeOrderLineRepository.ts
 import { Sequelize } from "sequelize";
 import { OrderLineRepository } from "../../../application/repositories/OrderLineRepository";
 import { OrderLineEntity } from "../../../domain/entities/OrderLineEntity";

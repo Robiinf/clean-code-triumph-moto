@@ -2,6 +2,8 @@ import type { CompanyRepository } from "../../repositories/CompanyRepository";
 import { CompanyName } from "../../../domain/types/CompanyName";
 import { CompanySiret } from "../../../domain/types/CompanySiret";
 import { CompanyNotFound } from "../../../domain/errors/CompanyNotFound";
+import { InvalidSiretError } from "../../../domain/errors/InvalidSiretError";
+import { CompanyNameTooShortError } from "../../../domain/errors/CompanyNameTooShortError";
 
 export class EditCompany {
   public constructor(private readonly companyRepository: CompanyRepository) {}
@@ -15,7 +17,9 @@ export class EditCompany {
     city: string,
     postalCode: string,
     country: string
-  ) {
+  ): Promise<
+    void | CompanyNotFound | InvalidSiretError | CompanyNameTooShortError
+  > {
     const company = await this.companyRepository.findById(companyId);
 
     if (!company) {

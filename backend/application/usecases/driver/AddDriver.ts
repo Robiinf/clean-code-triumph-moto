@@ -17,7 +17,7 @@ export class AddDriver {
     birthDate: Date,
     companyId: string,
     driverLicenseId?: string
-  ) {
+  ): Promise<void | CompanyNotFound> {
     const company = await this.companyRepository.findById(companyId);
     if (!company) {
       return new CompanyNotFound();

@@ -13,7 +13,7 @@ export class EditDriver {
     birthDate: Date,
     companyId: string,
     driverLicenseId?: string
-  ) {
+  ): Promise<void | DriverNotFound> {
     const driver = await this.driverRepository.findById(id);
 
     if (!driver) {
