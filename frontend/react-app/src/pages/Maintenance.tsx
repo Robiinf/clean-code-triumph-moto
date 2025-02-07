@@ -9,10 +9,12 @@ import { MdOutlineModeEdit, MdOutlineRemoveRedEye } from "react-icons/md";
 
 //Entity
 import { Button } from "@/components/ui/button";
-import CreateMaintenance from "@/modals/CreateMaintenance";
+import MaintenanceForm from "@/modals/MaintenanceForm";
 import MaintenanceDetails from "@/modals/MaintenanceDetails";
 import MotorcycleOnMaintenace from "@/modals/MotorcycleOnMaintenace";
 import type { Maintenance } from "@/types/Maintenance";
+import { MaintenanceformSchema } from "@/types/zod/MaintenanceFormSchema";
+import { z } from "zod";
 
 const Maintenance = () => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -48,6 +50,48 @@ const Maintenance = () => {
     setSelectedMaintenance(null);
     setActionType(null);
   };
+
+  function onCreateSubmit(values: z.infer<typeof MaintenanceformSchema>) {
+    const response = fetch("http://localhost:3000/api/maintenances", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    response.then(async (res) => {
+      const data = await res.json();
+      setMaintenances((prev) => [...prev, data.data]);
+    });
+
+    closeDialog();
+  }
+
+  function onEditSubmit(values: z.infer<typeof MaintenanceformSchema>) {
+    console.log(values);
+    const response = fetch(
+      `http://localhost:3000/api/maintenances/${selectedMaintenance?.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    response.then(async (res) => {
+      const data = await res.json();
+      setMaintenances((prev) =>
+        prev.map((maintenance) =>
+          maintenance.id === data.data.id ? data.data : maintenance
+        )
+      );
+    });
+
+    closeDialog();
+  }
 
   const columns: ColumnDef<Maintenance>[] = [
     {
@@ -121,13 +165,18 @@ const Maintenance = () => {
           )}
 
           {selectedMaintenance && actionType === "edit" && (
-            <div>
-              <h2 className="text-lg font-bold">Modifier la maintenance</h2>
-            </div>
+            <MaintenanceForm
+              selectedMaintenance={selectedMaintenance}
+              onSubmit={onEditSubmit}
+              closeDialog={closeDialog}
+              setMaintenances={setMaintenances}
+            />
           )}
 
           {actionType === "add" && (
-            <CreateMaintenance
+            <MaintenanceForm
+              selectedMaintenance={null}
+              onSubmit={onCreateSubmit}
               closeDialog={closeDialog}
               setMaintenances={setMaintenances}
             />

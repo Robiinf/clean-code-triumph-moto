@@ -32,26 +32,33 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Maintenance } from "@/types/Maintenance";
-
-const MaintenanceformSchema = z.object({
-  motorcycleId: z.string().min(2).max(50),
-  maintenanceType: z.string().min(2).max(50),
-  maintenanceDate: z.string(),
-  description: z.string().min(0).max(50),
-  techniciansRecommendation: z.string().min(0).max(50),
-  currentMotorcycleMileage: z.preprocess(
-    (cmm) => parseInt(z.string().parse(cmm)),
-    z.number().int().positive()
-  ),
-});
+import { MaintenanceformSchema } from "@/types/zod/MaintenanceFormSchema";
 
 interface Props {
+  onSubmit: (values: z.infer<typeof MaintenanceformSchema>) => void;
+  selectedMaintenance: Maintenance | null;
   closeDialog: () => void;
   setMaintenances: React.Dispatch<React.SetStateAction<Maintenance[]>>;
 }
 
-const CreateMaintenance = (props: Props) => {
+const MaintenanceForm = (props: Props) => {
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
+
+  const formatDate = (date: Date) => {
+    return (
+      (date.getFullYear() < 10
+        ? "0" + date.getFullYear().toString()
+        : date.getFullYear().toString()) +
+      "-" +
+      (date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1).toString()
+        : (date.getMonth() + 1).toString()) +
+      "-" +
+      (date.getDate()
+        ? "0" + date.getDate().toString()
+        : date.getDate().toString())
+    );
+  };
 
   useEffect(() => {
     const fetchMotorcycles = async () => {
@@ -67,47 +74,32 @@ const CreateMaintenance = (props: Props) => {
   const form = useForm<z.infer<typeof MaintenanceformSchema>>({
     resolver: zodResolver(MaintenanceformSchema),
     defaultValues: {
-      motorcycleId: "",
-      maintenanceType: "",
-      maintenanceDate:
-        (new Date().getFullYear() < 10
-          ? "0" + new Date().getFullYear().toString()
-          : new Date().getFullYear().toString()) +
-        "-" +
-        (new Date().getMonth() + 1 < 10
-          ? "0" + (new Date().getMonth() + 1).toString()
-          : (new Date().getMonth() + 1).toString()) +
-        "-" +
-        (new Date().getDate()
-          ? "0" + new Date().getDate().toString()
-          : new Date().getDate().toString()),
-      description: "",
-      techniciansRecommendation: "",
-      currentMotorcycleMileage: 0,
+      motorcycleId: props.selectedMaintenance?.motorcycleId || "",
+      maintenanceType: props.selectedMaintenance?.maintenanceType.value || "",
+      maintenanceDate: props.selectedMaintenance?.maintenanceDate
+        ? formatDate(new Date(props.selectedMaintenance?.maintenanceDate))
+        : formatDate(new Date()),
+      description: props.selectedMaintenance?.description || "",
+      techniciansRecommendation:
+        props.selectedMaintenance?.techniciansRecommendation || "",
+      currentMotorcycleMileage:
+        props.selectedMaintenance?.currentMotorcycleMileage.value || 0,
     },
   });
 
   function onSubmit(values: z.infer<typeof MaintenanceformSchema>) {
-    const response = fetch("http://localhost:3000/api/maintenances", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-
-    response.then(async (res) => {
-      const data = await res.json();
-      props.setMaintenances((prev) => [...prev, data.data]);
-    });
-
+    props.onSubmit(values);
     props.closeDialog();
   }
 
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Créer une Maintenance</DialogTitle>
+        <DialogTitle>
+          {props.selectedMaintenance
+            ? "Modifier la Maintenance"
+            : "Créer une Maintenance"}
+        </DialogTitle>
         <DialogDescription>
           Veuillez remplir tous les champs obligatoires
         </DialogDescription>
@@ -121,6 +113,7 @@ const CreateMaintenance = (props: Props) => {
               <FormItem>
                 <FormLabel>Moto</FormLabel>
                 <Select
+                  disabled={!!props.selectedMaintenance}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -149,6 +142,7 @@ const CreateMaintenance = (props: Props) => {
               <FormItem>
                 <FormLabel>Type de maintenance</FormLabel>
                 <Select
+                  disabled={!!props.selectedMaintenance}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -219,7 +213,11 @@ const CreateMaintenance = (props: Props) => {
               <FormItem>
                 <FormLabel>Kilometrage</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input
+                    disabled={!!props.selectedMaintenance}
+                    type="number"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -227,7 +225,9 @@ const CreateMaintenance = (props: Props) => {
           />
 
           <DialogFooter className="sm:justify-start">
-            <Button type="submit">Créer</Button>
+            <Button type="submit">
+              {props.selectedMaintenance ? "Modifier" : "Créer"}
+            </Button>
             <DialogClose asChild>
               <Button type="button" variant="secondary">
                 Fermer
@@ -240,4 +240,4 @@ const CreateMaintenance = (props: Props) => {
   );
 };
 
-export default CreateMaintenance;
+export default MaintenanceForm;
