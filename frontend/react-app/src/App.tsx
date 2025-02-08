@@ -5,7 +5,7 @@ import Company from "./pages/Company";
 import Maintenance from "./pages/Maintenance";
 import Motorcycle from "./pages/Motorcycle";
 import NoPage from "./pages/NoPage";
-import SquarePart from "./pages/SquarePart";
+import SparePart from "./pages/SparePart";
 import TestSession from "./pages/TestSession";
 
 export default function App() {
@@ -16,7 +16,7 @@ export default function App() {
           <Route index element={<Motorcycle />} />
           <Route path="company" element={<Company />} />
           <Route path="maintenance" element={<Maintenance />} />
-          <Route path="square-part" element={<SquarePart />} />
+          <Route path="spare-part" element={<SparePart />} />
           <Route path="test-session" element={<TestSession />} />
           <Route path="*" element={<NoPage />} />
         </Route>

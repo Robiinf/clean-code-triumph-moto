@@ -16,7 +16,7 @@ const Sidenav = () => {
             <a href="/maintenance">Maintenances</a>
           </li>
           <li>
-            <a href="/square-part">Pièces</a>
+            <a href="/spare-part">Pièces</a>
           </li>
           <li>
             <a href="/test-session" className="text-nowrap">

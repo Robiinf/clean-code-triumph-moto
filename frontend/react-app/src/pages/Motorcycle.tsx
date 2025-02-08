@@ -13,37 +13,8 @@ import {
 } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 
-interface Motorcycle {
-  vin: string;
-  model: string;
-  year: number;
-  status: string;
-  mileage: number;
-}
-
-const data: Motorcycle[] = [
-  {
-    vin: "1HGCM82633A001234",
-    model: "Civic",
-    year: 2003,
-    status: "Active",
-    mileage: 100000,
-  },
-  {
-    vin: "1HGCM82633A001235",
-    model: "Accord",
-    year: 2004,
-    status: "Active",
-    mileage: 200000,
-  },
-  {
-    vin: "1HGCM82633A001236",
-    model: "CR-V",
-    year: 2005,
-    status: "Inactive",
-    mileage: 300000,
-  },
-];
+import type { Motorcycle } from "@/types/Motorcycle";
+import MotorcycleDetails from "@/modals/MotorcycleDetails";
 
 const Motorcycle = () => {
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
@@ -54,7 +25,18 @@ const Motorcycle = () => {
   >(null);
 
   useEffect(() => {
-    setMotorcycles(data);
+    // Fetch motorcycles from the API
+    const fetchMotorcycles = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/motorcycles");
+        const data = await response.json();
+        setMotorcycles(data);
+      } catch (error) {
+        console.error("Erreur lors du chargement des motos :", error);
+      }
+    };
+
+    fetchMotorcycles();
   }, []);
 
   const openDialog = (
@@ -74,6 +56,9 @@ const Motorcycle = () => {
     {
       accessorKey: "vin",
       header: "VIN",
+      cell: ({ row }) => {
+        return <div>{row.original.vin.value}</div>;
+      },
     },
     {
       accessorKey: "model",
@@ -88,10 +73,10 @@ const Motorcycle = () => {
       header: "Statut",
     },
     {
-      accessorKey: "mileage",
+      accessorKey: "mileageInKilometers",
       header: "Kilometrage",
       cell: ({ row }) => {
-        return <div>{row.getValue("mileage")} km</div>;
+        return <div>{row.original.mileageInKilometers.value} km</div>;
       },
     },
     {
@@ -157,13 +142,7 @@ const Motorcycle = () => {
           )}
 
           {selectedMotorcycle && actionType === "view" && (
-            <div>
-              <h2 className="text-lg font-bold">Détails de la moto</h2>
-              <p>Modèle: {selectedMotorcycle.model}</p>
-              <p>Année: {selectedMotorcycle.year}</p>
-              <p>Statut: {selectedMotorcycle.status}</p>
-              <p>KM: {selectedMotorcycle.mileage} km</p>
-            </div>
+            <MotorcycleDetails motorcycle={selectedMotorcycle} />
           )}
 
           {selectedMotorcycle && actionType === "edit" && (

@@ -69,7 +69,6 @@ const Maintenance = () => {
   }
 
   function onEditSubmit(values: z.infer<typeof MaintenanceformSchema>) {
-    console.log(values);
     const response = fetch(
       `http://localhost:3000/api/maintenances/${selectedMaintenance?.id}`,
       {

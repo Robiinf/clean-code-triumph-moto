@@ -18,7 +18,7 @@ const MaintenanceDetails = (props: Props) => {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Detail de la Moto</DialogTitle>
+        <DialogTitle>Detail de la Maintenance</DialogTitle>
         <DialogDescription>
           Concernant la maintenance du :{" "}
           {new Date(props.maintenance.maintenanceDate).toLocaleDateString()}
