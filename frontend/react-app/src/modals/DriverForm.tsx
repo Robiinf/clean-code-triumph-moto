@@ -29,6 +29,10 @@ interface Props {
 }
 
 const DriverForm = (props: Props) => {
+  const displayDate = props.selectedDriver?.birthDate
+    ? new Date(props.selectedDriver?.birthDate).toISOString().split("T")[0]
+    : "";
+
   const form = useForm<z.infer<typeof DriverFormSchema>>({
     resolver: zodResolver(DriverFormSchema),
     defaultValues: {
@@ -36,7 +40,7 @@ const DriverForm = (props: Props) => {
       lastName: props.selectedDriver?.lastName || "",
       phone: props.selectedDriver?.phone || "",
       email: props.selectedDriver?.email || "",
-      birthDate: props.selectedDriver?.birthDate || "",
+      birthDate: displayDate,
       companyId: props.companyId,
     },
   });

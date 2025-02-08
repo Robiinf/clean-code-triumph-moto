@@ -149,22 +149,15 @@ export default function CompanyDetail() {
         const driver = row.original;
         return (
           <div className="flex justify-end space-x-2">
-            {/* Bouton Voir */}
             <button className="text-green-500" onClick={() => {}}>
               <MdOutlineRemoveRedEye />
             </button>
 
-            {/* Bouton Modifier */}
             <button
               className="text-sky-500"
               onClick={() => openDialog(driver, "edit")}
             >
               <MdOutlineModeEdit />
-            </button>
-
-            {/* Bouton Pannes */}
-            <button className="text-orange-500" onClick={() => {}}>
-              <LuWrench />
             </button>
           </div>
         );
