@@ -8,6 +8,8 @@ import { DriverFormSchema } from "@/types/zod/DriverFormSchema";
 import LicenseForm from "@/modals/LicenseForm";
 import { LicenseFormSchema } from "@/types/zod/LicenseFormSchema";
 import IncidentsOnDriver from "@/modals/IncidentsOnDriver";
+import IncidentForm from "@/modals/IncidentForm";
+import { IncidentFormSchema } from "@/types/zod/IncidentFormSchema";
 
 // icons
 import {
@@ -99,6 +101,19 @@ export default function CompanyDetail() {
 
   const onLicenseSubmit = (values: z.infer<typeof LicenseFormSchema>) => {
     const response = fetch(`http://localhost:3000/api/driver-licenses`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    response.then(() => fetchDrivers());
+    closeDialog();
+  };
+
+  const onIncidentSubmit = (values: z.infer<typeof IncidentFormSchema>) => {
+    const response = fetch(`http://localhost:3000/api/incidents`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -291,7 +306,13 @@ export default function CompanyDetail() {
               </div>
             )}
 
-            {selectedDriver && actionType === "addIncident" && <div></div>}
+            {selectedDriver && actionType === "addIncident" && (
+              <IncidentForm
+                closeDialog={closeDialog}
+                selectedDriver={selectedDriver}
+                onSubmit={onIncidentSubmit}
+              />
+            )}
 
             {selectedDriver && actionType === "viewIncidents" && (
               <IncidentsOnDriver driver={selectedDriver} />
