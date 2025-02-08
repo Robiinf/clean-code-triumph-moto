@@ -7,6 +7,7 @@ import Motorcycle from "./pages/Motorcycle";
 import NoPage from "./pages/NoPage";
 import SparePart from "./pages/SparePart";
 import TestSession from "./pages/TestSession";
+import CompanyDetail from "./pages/CompanyDetail";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/" element={<Sidenav />}>
           <Route index element={<Motorcycle />} />
           <Route path="company" element={<Company />} />
+          <Route path="company/:id" element={<CompanyDetail />} />
           <Route path="maintenance" element={<Maintenance />} />
           <Route path="spare-part" element={<SparePart />} />
           <Route path="test-session" element={<TestSession />} />
