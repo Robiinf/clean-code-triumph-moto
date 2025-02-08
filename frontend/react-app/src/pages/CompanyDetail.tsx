@@ -5,16 +5,17 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/DataTable";
 import DriverForm from "@/modals/DriverForm";
 import { DriverFormSchema } from "@/types/zod/DriverFormSchema";
+import LicenseForm from "@/modals/LicenseForm";
 
 // icons
 import {
   MdOutlineModeEdit,
-  MdDeleteOutline,
-  MdOutlineRemoveRedEye,
+  MdOutlineCarCrash,
+  MdOutlineCreditCard,
+  MdOutlineDesignServices,
 } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { LuWrench } from "react-icons/lu";
 import type { Company } from "@/types/Company";
 import type { Driver } from "@/types/Driver";
 
@@ -26,7 +27,7 @@ export default function CompanyDetail() {
     null
   );
   const [actionType, setActionType] = React.useState<
-    "view" | "edit" | "add" | "delete" | "driver" | null
+    "edit" | "add" | "driver" | "license" | null
   >(null);
 
   const fetchDrivers = async () => {
@@ -88,9 +89,22 @@ export default function CompanyDetail() {
     closeDialog();
   };
 
+  const onLicenseSubmit = (values: z.infer<typeof LicenseFormSchema>) => {
+    const response = fetch(`http://localhost:3000/api/driver-licenses`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    response.then(() => fetchDrivers());
+    closeDialog();
+  };
+
   const openDialog = (
     driver: Driver | null,
-    action: "edit" | "add" | "driver"
+    action: "edit" | "add" | "driver" | "license"
   ) => {
     setSelectedDriver(driver);
     setActionType(action);
@@ -123,6 +137,10 @@ export default function CompanyDetail() {
       header: "Email",
     },
     {
+      accessorKey: "phone",
+      header: "Téléphone",
+    },
+    {
       accessorKey: "driverLicenseId",
       header: "License",
       cell: ({ row }) => {
@@ -149,15 +167,26 @@ export default function CompanyDetail() {
         const driver = row.original;
         return (
           <div className="flex justify-end space-x-2">
-            <button className="text-green-500" onClick={() => {}}>
-              <MdOutlineRemoveRedEye />
-            </button>
-
             <button
               className="text-sky-500"
               onClick={() => openDialog(driver, "edit")}
             >
               <MdOutlineModeEdit />
+            </button>
+
+            {driver.driverLicenseId == null && (
+              <button
+                className="text-yellow-500"
+                onClick={() => openDialog(driver, "license")}
+              >
+                <MdOutlineCreditCard />
+              </button>
+            )}
+            <button className="text-red-500" onClick={() => {}}>
+              <MdOutlineCarCrash />
+            </button>
+            <button className="text-slate-600" onClick={() => {}}>
+              <MdOutlineDesignServices />
             </button>
           </div>
         );
@@ -228,6 +257,16 @@ export default function CompanyDetail() {
                   onSubmit={onUpdateSubmit}
                   selectedDriver={selectedDriver}
                   companyId={company?.id}
+                />
+              </div>
+            )}
+
+            {selectedDriver && actionType === "license" && (
+              <div>
+                <LicenseForm
+                  closeDialog={closeDialog}
+                  onSubmit={onLicenseSubmit}
+                  selectedDriver={selectedDriver}
                 />
               </div>
             )}
