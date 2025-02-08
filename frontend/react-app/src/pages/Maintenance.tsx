@@ -168,7 +168,6 @@ const Maintenance = () => {
               selectedMaintenance={selectedMaintenance}
               onSubmit={onEditSubmit}
               closeDialog={closeDialog}
-              setMaintenances={setMaintenances}
             />
           )}
 
@@ -177,7 +176,6 @@ const Maintenance = () => {
               selectedMaintenance={null}
               onSubmit={onCreateSubmit}
               closeDialog={closeDialog}
-              setMaintenances={setMaintenances}
             />
           )}
         </DialogContent>

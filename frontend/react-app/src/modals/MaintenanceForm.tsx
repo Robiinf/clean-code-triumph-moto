@@ -38,7 +38,6 @@ interface Props {
   onSubmit: (values: z.infer<typeof MaintenanceformSchema>) => void;
   selectedMaintenance: Maintenance | null;
   closeDialog: () => void;
-  setMaintenances: React.Dispatch<React.SetStateAction<Maintenance[]>>;
 }
 
 const MaintenanceForm = (props: Props) => {

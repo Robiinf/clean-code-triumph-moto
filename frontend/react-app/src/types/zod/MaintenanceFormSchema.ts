@@ -6,5 +6,5 @@ export const MaintenanceformSchema = z.object({
   maintenanceDate: z.string(),
   description: z.string().min(0).max(50),
   techniciansRecommendation: z.string().min(0).max(50),
-  currentMotorcycleMileage: z.number().int().positive(),
+  currentMotorcycleMileage: z.coerce.number().int().positive(),
 });

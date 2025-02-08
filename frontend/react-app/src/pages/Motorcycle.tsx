@@ -5,43 +5,80 @@ import { useEffect, useState } from "react";
 
 // icons
 import BreakdownList from "@/modals/BreakdownList";
+import { GrHostMaintenance } from "react-icons/gr";
 import { LuWrench } from "react-icons/lu";
-import {
-  MdDeleteOutline,
-  MdOutlineModeEdit,
-  MdOutlineRemoveRedEye,
-} from "react-icons/md";
-import { Button } from "@/components/ui/button";
+import { MdOutlineModeEdit, MdOutlineRemoveRedEye } from "react-icons/md";
 
-import type { Motorcycle } from "@/types/Motorcycle";
+//components
+import { Button } from "@/components/ui/button";
 import MotorcycleDetails from "@/modals/MotorcycleDetails";
+import MotorcycleForm from "@/modals/MotorcycleForm";
+
+//types
+import type { Motorcycle } from "@/types/Motorcycle";
+import { MotorcycleformSchema } from "@/types/zod/MotorcycleFormSchema";
+import { z } from "zod";
+import MaintenanceOnMotorcycle from "@/modals/MaintenanceOnMotorcycle";
 
 const Motorcycle = () => {
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
   const [selectedMotorcycle, setSelectedMotorcycle] =
     useState<Motorcycle | null>(null);
   const [actionType, setActionType] = useState<
-    "view" | "edit" | "add" | "delete" | "breakdown" | null
+    "view" | "edit" | "add" | "maintenance" | "breakdown" | null
   >(null);
+
+  const fetchMotorcycles = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/motorcycles");
+      const data = await response.json();
+      setMotorcycles(data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des motos :", error);
+    }
+  };
 
   useEffect(() => {
     // Fetch motorcycles from the API
-    const fetchMotorcycles = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/motorcycles");
-        const data = await response.json();
-        setMotorcycles(data);
-      } catch (error) {
-        console.error("Erreur lors du chargement des motos :", error);
-      }
-    };
-
     fetchMotorcycles();
   }, []);
 
+  const onCreateSubmit = (values: z.infer<typeof MotorcycleformSchema>) => {
+    const reponse = fetch("http://localhost:3001/motorcycles", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    // Fetch motorcycles from the API
+    reponse.then(() => fetchMotorcycles());
+
+    closeDialog();
+  };
+
+  const onEditSubmit = (values: z.infer<typeof MotorcycleformSchema>) => {
+    const reponse = fetch(
+      `http://localhost:3001/motorcycles/${selectedMotorcycle?.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    // Fetch motorcycles from the API
+    reponse.then(() => fetchMotorcycles());
+
+    closeDialog();
+  };
+
   const openDialog = (
     motorcycle: Motorcycle | null,
-    action: "view" | "add" | "edit" | "delete" | "breakdown"
+    action: "view" | "add" | "edit" | "maintenance" | "breakdown"
   ) => {
     setSelectedMotorcycle(motorcycle);
     setActionType(action);
@@ -57,7 +94,7 @@ const Motorcycle = () => {
       accessorKey: "vin",
       header: "VIN",
       cell: ({ row }) => {
-        return <div>{row.original.vin.value}</div>;
+        return <div className="tracking-widest">{row.original.vin.value}</div>;
       },
     },
     {
@@ -71,6 +108,21 @@ const Motorcycle = () => {
     {
       accessorKey: "status",
       header: "Statut",
+      cell: ({ row }) => {
+        return (
+          <div
+            className={
+              row.original.status === "available"
+                ? "text-green-400"
+                : "text-rose-400"
+            }
+          >
+            {row.original.status === "available"
+              ? "Disponible"
+              : "Indisponible"}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "mileageInKilometers",
@@ -112,10 +164,10 @@ const Motorcycle = () => {
 
             {/* Bouton Supprimer */}
             <button
-              className="text-rose-500"
-              onClick={() => openDialog(motorcycle, "delete")}
+              className="text-orange-500"
+              onClick={() => openDialog(motorcycle, "maintenance")}
             >
-              <MdDeleteOutline />
+              <GrHostMaintenance />
             </button>
           </div>
         );
@@ -146,39 +198,23 @@ const Motorcycle = () => {
           )}
 
           {selectedMotorcycle && actionType === "edit" && (
-            <div>
-              <h2 className="text-lg font-bold">Modifier la moto</h2>
-              {/* Ajoute ici un formulaire pour modifier la moto */}
-            </div>
+            <MotorcycleForm
+              closeDialog={closeDialog}
+              onSubmit={onEditSubmit}
+              selectedMotorcycle={selectedMotorcycle}
+            />
           )}
 
           {actionType === "add" && (
-            <div>
-              <h2 className="text-lg font-bold">Ajouter la moto</h2>
-              {/* Ajoute ici un formulaire pour modifier la moto */}
-            </div>
+            <MotorcycleForm
+              closeDialog={closeDialog}
+              onSubmit={onCreateSubmit}
+              selectedMotorcycle={null}
+            />
           )}
 
-          {selectedMotorcycle && actionType === "delete" && (
-            <div>
-              <h2 className="text-lg font-bold text-red-500">
-                Supprimer la moto
-              </h2>
-              <p>
-                Êtes-vous sûr de vouloir supprimer {selectedMotorcycle.model} ?
-              </p>
-              <div className="flex justify-end space-x-2">
-                <button
-                  className="bg-gray-200 p-2 rounded"
-                  onClick={closeDialog}
-                >
-                  Annuler
-                </button>
-                <button className="bg-red-500 text-white p-2 rounded">
-                  Supprimer
-                </button>
-              </div>
-            </div>
+          {selectedMotorcycle && actionType === "maintenance" && (
+            <MaintenanceOnMotorcycle motorcycle={selectedMotorcycle} />
           )}
         </DialogContent>
       </Dialog>
