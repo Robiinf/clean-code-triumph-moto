@@ -6,6 +6,8 @@ import { DataTable } from "@/components/DataTable";
 import DriverForm from "@/modals/DriverForm";
 import { DriverFormSchema } from "@/types/zod/DriverFormSchema";
 import LicenseForm from "@/modals/LicenseForm";
+import { LicenseFormSchema } from "@/types/zod/LicenseFormSchema";
+import IncidentsOnDriver from "@/modals/IncidentsOnDriver";
 
 // icons
 import {
@@ -27,7 +29,13 @@ export default function CompanyDetail() {
     null
   );
   const [actionType, setActionType] = React.useState<
-    "edit" | "add" | "driver" | "license" | null
+    | "edit"
+    | "add"
+    | "driver"
+    | "license"
+    | "viewIncidents"
+    | "addIncident"
+    | null
   >(null);
 
   const fetchDrivers = async () => {
@@ -104,7 +112,13 @@ export default function CompanyDetail() {
 
   const openDialog = (
     driver: Driver | null,
-    action: "edit" | "add" | "driver" | "license"
+    action:
+      | "edit"
+      | "add"
+      | "driver"
+      | "license"
+      | "viewIncidents"
+      | "addIncident"
   ) => {
     setSelectedDriver(driver);
     setActionType(action);
@@ -182,10 +196,16 @@ export default function CompanyDetail() {
                 <MdOutlineCreditCard />
               </button>
             )}
-            <button className="text-red-500" onClick={() => {}}>
+            <button
+              className="text-red-500"
+              onClick={() => openDialog(driver, "addIncident")}
+            >
               <MdOutlineCarCrash />
             </button>
-            <button className="text-slate-600" onClick={() => {}}>
+            <button
+              className="text-slate-600"
+              onClick={() => openDialog(driver, "viewIncidents")}
+            >
               <MdOutlineDesignServices />
             </button>
           </div>
@@ -269,6 +289,12 @@ export default function CompanyDetail() {
                   selectedDriver={selectedDriver}
                 />
               </div>
+            )}
+
+            {selectedDriver && actionType === "addIncident" && <div></div>}
+
+            {selectedDriver && actionType === "viewIncidents" && (
+              <IncidentsOnDriver driver={selectedDriver} />
             )}
 
             {actionType === "add" && (
