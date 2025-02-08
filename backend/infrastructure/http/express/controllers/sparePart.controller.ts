@@ -8,6 +8,7 @@ import { UpdateSparePartStock } from "../../../../application/usecases/sparePart
 import { GetLowStockSpareParts } from "../../../../application/usecases/sparePart/GetLowStockSpareParts";
 import { SearchSparePartsByName } from "../../../../application/usecases/sparePart/SearchSparePartsByName";
 import { ZodSparePartValidator } from "../../validation/implementations/zod/ZodSparePartValidator";
+import { EditSparePart } from "../../../../application/usecases/sparePart/EditSparePart";
 
 export class SparePartController {
   private sparePartRepository: SparePartRepository;
@@ -109,7 +110,7 @@ export class SparePartController {
     }
   };
 
-  updateStock = async (
+  editStock = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -134,6 +135,50 @@ export class SparePartController {
       res.status(200).json({
         status: "success",
         message: "Stock updated successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  editSparePart = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const validationResult = await this.validator.validate(req.body);
+
+      if (!validationResult.success) {
+        res.status(400).json({
+          status: "error",
+          errors: validationResult.errors,
+        });
+        return;
+      }
+
+      const editSparePartUseCase = new EditSparePart(this.sparePartRepository);
+      const result = await editSparePartUseCase.execute(
+        id,
+        validationResult.data.name,
+        validationResult.data.description,
+        validationResult.data.unitPrice,
+        validationResult.data.stockQuantity,
+        validationResult.data.alertLowStock
+      );
+
+      if (result instanceof Error) {
+        res.status(400).json({
+          status: "error",
+          message: result.name,
+        });
+        return;
+      }
+
+      res.status(200).json({
+        status: "success",
+        message: "Spare Part updated successfully",
       });
     } catch (error) {
       next(error);

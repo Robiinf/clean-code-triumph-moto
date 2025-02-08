@@ -5,6 +5,14 @@ export interface SparePartRepository {
   findById(id: string): Promise<SparePartEntity | null>;
   findAll(): Promise<SparePartEntity[]>;
   delete(id: string): Promise<void>;
+  edit(
+    id: string,
+    name: string,
+    description: string,
+    unitPrice: number,
+    stockQuantity: number,
+    alertLowStock: number
+  ): Promise<void>;
 
   updateStockQuantity(id: string, quantity: number): Promise<void>;
   updateAlertLowStock(id: string, quantity: number): Promise<void>;

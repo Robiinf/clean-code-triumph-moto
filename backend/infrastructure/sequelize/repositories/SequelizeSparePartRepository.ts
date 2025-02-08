@@ -59,6 +59,34 @@ export class SequelizeSparePartRepository implements SparePartRepository {
     });
   }
 
+  async edit(
+    id: string,
+    name: string,
+    description: string,
+    unitPrice: number,
+    stockQuantity: number,
+    alertLowStock: number
+  ): Promise<void> {
+    if (!IdValidator.isValid(id)) {
+      return;
+    }
+
+    await SparePartModel.update(
+      {
+        name,
+        description,
+        unitPrice,
+        stockQuantity,
+        alertLowStock,
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+  }
+
   async updateStockQuantity(id: string, quantity: number): Promise<void> {
     if (!IdValidator.isValid(id)) {
       return;

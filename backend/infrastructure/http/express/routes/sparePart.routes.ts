@@ -9,7 +9,8 @@ export const sparePartRoutes = () => {
   router.get("/spare-parts/low-stock", controller.getLowStock);
   router.get("/spare-parts/search", controller.searchByName);
   router.get("/spare-parts/:id", controller.getSparePartById);
-  router.patch("/spare-parts/:id/stock", controller.updateStock);
+  router.put("/spare-parts/:id", controller.editSparePart);
+  router.patch("/spare-parts/:id/stock", controller.editStock);
 
   return router;
 };
