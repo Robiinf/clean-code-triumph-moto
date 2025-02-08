@@ -1,7 +1,10 @@
+import { z } from "zod";
 import { useParams } from "react-router-dom";
 import React, { useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/DataTable";
+import DriverForm from "@/modals/DriverForm";
+import { DriverFormSchema } from "@/types/zod/DriverFormSchema";
 
 // icons
 import {
@@ -26,6 +29,18 @@ export default function CompanyDetail() {
     "view" | "edit" | "add" | "delete" | "driver" | null
   >(null);
 
+  const fetchDrivers = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/companies/${id}/drivers`
+      );
+      const data = await response.json();
+      setDrivers(data.data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des entreprises :", error);
+    }
+  };
+
   useEffect(() => {
     const fetchCompany = async () => {
       try {
@@ -39,25 +54,43 @@ export default function CompanyDetail() {
       }
     };
 
-    const fetchDrivers = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/api/companies/${id}/drivers`
-        );
-        const data = await response.json();
-        setDrivers(data.data);
-      } catch (error) {
-        console.error("Erreur lors du chargement des entreprises :", error);
-      }
-    };
-
     fetchCompany();
     fetchDrivers();
   }, [id]);
 
+  const onCreateSubmit = (values: z.infer<typeof DriverFormSchema>) => {
+    const response = fetch(`http://localhost:3000/api/drivers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    response.then(() => fetchDrivers());
+
+    closeDialog();
+  };
+
+  const onUpdateSubmit = (values: z.infer<typeof DriverFormSchema>) => {
+    const response = fetch(
+      `http://localhost:3000/api/drivers/${selectedDriver?.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    response.then(() => fetchDrivers());
+    closeDialog();
+  };
+
   const openDialog = (
     driver: Driver | null,
-    action: "view" | "edit" | "add" | "delete" | "driver"
+    action: "edit" | "add" | "driver"
   ) => {
     setSelectedDriver(driver);
     setActionType(action);
@@ -113,7 +146,7 @@ export default function CompanyDetail() {
       accessorKey: "actions",
       header: () => <div className="text-right">Actions</div>,
       cell: ({ row }) => {
-        //const driver = row.original;
+        const driver = row.original;
         return (
           <div className="flex justify-end space-x-2">
             {/* Bouton Voir */}
@@ -122,18 +155,16 @@ export default function CompanyDetail() {
             </button>
 
             {/* Bouton Modifier */}
-            <button className="text-sky-500" onClick={() => {}}>
+            <button
+              className="text-sky-500"
+              onClick={() => openDialog(driver, "edit")}
+            >
               <MdOutlineModeEdit />
             </button>
 
             {/* Bouton Pannes */}
             <button className="text-orange-500" onClick={() => {}}>
               <LuWrench />
-            </button>
-
-            {/* Bouton Supprimer */}
-            <button className="text-rose-500" onClick={() => {}}>
-              <MdDeleteOutline />
             </button>
           </div>
         );
@@ -193,48 +224,29 @@ export default function CompanyDetail() {
         <div className="w-full py-8">
           <DataTable columns={columns} data={drivers} />
         </div>
-        {/* Dialog avec contenu conditionnel */}
         <Dialog open={!!actionType} onOpenChange={closeDialog}>
           <DialogContent>
             {selectedDriver && actionType === "driver" && <div></div>}
 
-            {selectedDriver && actionType === "view" && (
-              <div>
-                <h2 className="text-lg font-bold">Détails de l'entreprise</h2>
-              </div>
-            )}
-
             {selectedDriver && actionType === "edit" && (
               <div>
-                <h2 className="text-lg font-bold">Modifier l'entreprise</h2>
-                {/* Ajoute ici un formulaire pour modifier la moto */}
+                <DriverForm
+                  closeDialog={closeDialog}
+                  onSubmit={onUpdateSubmit}
+                  selectedDriver={selectedDriver}
+                  companyId={company?.id}
+                />
               </div>
             )}
 
             {actionType === "add" && (
               <div>
-                <h2 className="text-lg font-bold">Ajouter une Entreprise</h2>
-                {/* Ajoute ici un formulaire pour modifier la moto */}
-              </div>
-            )}
-
-            {selectedDriver && actionType === "delete" && (
-              <div>
-                <h2 className="text-lg font-bold text-red-500">
-                  Supprimer l'entreprise
-                </h2>
-                <p>Êtes-vous sûr de vouloir supprimer ?</p>
-                <div className="flex justify-end space-x-2">
-                  <button
-                    className="bg-gray-200 p-2 rounded"
-                    onClick={closeDialog}
-                  >
-                    Annuler
-                  </button>
-                  <button className="bg-red-500 text-white p-2 rounded">
-                    Supprimer
-                  </button>
-                </div>
+                <DriverForm
+                  closeDialog={closeDialog}
+                  onSubmit={onCreateSubmit}
+                  selectedDriver={null}
+                  companyId={company?.id}
+                />
               </div>
             )}
           </DialogContent>
