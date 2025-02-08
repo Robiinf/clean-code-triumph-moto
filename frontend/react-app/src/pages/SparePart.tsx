@@ -137,7 +137,10 @@ const SparePart = () => {
   return (
     <div className="p-4 w-full">
       <h1 className="text-4xl">Pièces</h1>
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-end gap-x-4">
+        <Button onClick={() => window.open("http://localhost:5174")}>
+          Commander des Pièces
+        </Button>
         <Button onClick={() => openDialog(null, "add")}>
           Ajouter une pièce
         </Button>
