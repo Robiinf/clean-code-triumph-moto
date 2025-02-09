@@ -8,6 +8,7 @@ import NoPage from "./pages/NoPage";
 import SparePart from "./pages/SparePart";
 import TestSession from "./pages/TestSession";
 import CompanyDetail from "./pages/CompanyDetail";
+import Rentals from "./pages/Rentals";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="company/:id" element={<CompanyDetail />} />
           <Route path="maintenance" element={<Maintenance />} />
           <Route path="spare-part" element={<SparePart />} />
+          <Route path="rentals" element={<Rentals />} />
           <Route path="test-session" element={<TestSession />} />
           <Route path="*" element={<NoPage />} />
         </Route>

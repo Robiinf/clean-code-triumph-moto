@@ -13,7 +13,7 @@ const calculateRentalStatus = (
     return "Overdue";
   }
 
-  return "Active";
+  return "Ongoing";
 };
 
 export class RentalEntity {
