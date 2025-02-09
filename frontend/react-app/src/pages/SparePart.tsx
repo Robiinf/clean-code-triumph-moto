@@ -113,14 +113,6 @@ const SparePart = () => {
         const sparePart = row.original;
         return (
           <div className="flex justify-end space-x-2">
-            {/* Bouton Voir */}
-            <button
-              className="text-green-500"
-              onClick={() => openDialog(sparePart, "view")}
-            >
-              <MdOutlineRemoveRedEye />
-            </button>
-
             {/* Bouton Modifier */}
             <button
               className="text-sky-500"

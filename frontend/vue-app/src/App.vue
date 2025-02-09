@@ -130,7 +130,7 @@ onMounted(() => {
     <Card>
       <form @submit.prevent="onSubmit">
       <CardHeader>
-        <CardTitle>Commander des Piece</CardTitle>
+        <CardTitle>Commander des Pièces</CardTitle>
         <CardDescription>Remplir les champs afin de commander de nouvelle pièce</CardDescription>
       </CardHeader>
       <CardContent>

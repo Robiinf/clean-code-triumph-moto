@@ -34,8 +34,6 @@ interface Props {
 const SparePartOnMaintenance = ({ maintenance, onSubmit }: Props) => {
   const [spareParts, setSpareParts] = useState<SparePart[]>([]);
 
-  console.log(maintenance.replacedParts);
-
   const form = useForm({
     resolver: zodResolver(MaintenanceSparePartformSchema),
     defaultValues: {
@@ -68,7 +66,6 @@ const SparePartOnMaintenance = ({ maintenance, onSubmit }: Props) => {
   const handleSubmit = (
     values: z.infer<typeof MaintenanceSparePartformSchema>
   ) => {
-    console.log(values);
     onSubmit(values);
   };
 
