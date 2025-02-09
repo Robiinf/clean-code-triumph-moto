@@ -1,46 +1,18 @@
 import React, { useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/DataTable";
+import { useNavigate } from "react-router-dom";
+import z from "zod";
+import CompanyForm from "@/modals/CompanyForm";
+import { CompanyformSchema } from "@/types/zod/CompanyFormSchema";
+import type { Company } from "@/types/Company";
 
 // icons
-import {
-  MdOutlineModeEdit,
-  MdDeleteOutline,
-  MdOutlineRemoveRedEye,
-} from "react-icons/md";
+import { MdOutlineModeEdit, MdOutlineRemoveRedEye } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { LuWrench } from "react-icons/lu";
 
-interface Company {
-  name: string;
-  siret: string;
-  phone: string;
-  address: string;
-}
-
-/* const data = [
-  {
-    name: "Company 1",
-    siret: "123456789",
-    type: "SAS",
-    address: "1 rue de la paix",
-  },
-  {
-    name: "Company 2",
-    siret: "987654321",
-    type: "SARL",
-    address: "2 rue de la paix",
-  },
-  {
-    name: "Company 3",
-    siret: "123456789",
-    type: "SAS",
-    address: "3 rue de la paix",
-  },
-]; */
-
-export const Company = () => {
+const Company = () => {
   const [companies, setCompanies] = React.useState<Company[]>([]);
   const [selectedCompany, setSelectedCompany] = React.useState<Company | null>(
     null
@@ -49,31 +21,63 @@ export const Company = () => {
     "view" | "edit" | "add" | "delete" | "company" | null
   >(null);
 
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/companies");
-        const data = await response.json();
-        setCompanies(data.data);
-      } catch (error) {
-        console.error("Erreur lors du chargement des entreprises :", error);
-      }
-    };
+  const navigate = useNavigate();
 
+  const fetchCompanies = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/companies");
+      const data = await response.json();
+      setCompanies(data.data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des entreprises :", error);
+    }
+  };
+  useEffect(() => {
     fetchCompanies();
   }, []);
 
   const openDialog = (
-    maintenance: Company | null,
-    action: "view" | "edit" | "add" | "delete" | "company"
+    company: Company | null,
+    action: "edit" | "add" | "company"
   ) => {
-    setSelectedCompany(maintenance);
+    setSelectedCompany(company);
     setActionType(action);
   };
 
   const closeDialog = () => {
     setSelectedCompany(null);
     setActionType(null);
+  };
+
+  const onEditSubmit = (values: z.infer<typeof CompanyformSchema>) => {
+    const reponse = fetch(
+      `http://localhost:3000/api/companies/${selectedCompany?.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    reponse.then(() => fetchCompanies());
+
+    closeDialog();
+  };
+
+  const onCreateSubmit = (values: z.infer<typeof CompanyformSchema>) => {
+    const reponse = fetch("http://localhost:3000/api/companies", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    reponse.then(() => fetchCompanies());
+
+    closeDialog();
   };
 
   const columns: ColumnDef<Company>[] = [
@@ -97,13 +101,13 @@ export const Company = () => {
       accessorKey: "actions",
       header: () => <div className="text-right">Actions</div>,
       cell: ({ row }) => {
-        const motorcycle = row.original;
+        const company = row.original;
         return (
           <div className="flex justify-end space-x-2">
             {/* Bouton Voir */}
             <button
               className="text-green-500"
-              onClick={() => openDialog(motorcycle, "view")}
+              onClick={() => navigate(`/company/${company.id}`)}
             >
               <MdOutlineRemoveRedEye />
             </button>
@@ -111,25 +115,9 @@ export const Company = () => {
             {/* Bouton Modifier */}
             <button
               className="text-sky-500"
-              onClick={() => openDialog(motorcycle, "edit")}
+              onClick={() => openDialog(company, "edit")}
             >
               <MdOutlineModeEdit />
-            </button>
-
-            {/* Bouton Pannes */}
-            <button
-              className="text-orange-500"
-              onClick={() => openDialog(motorcycle, "company")}
-            >
-              <LuWrench />
-            </button>
-
-            {/* Bouton Supprimer */}
-            <button
-              className="text-rose-500"
-              onClick={() => openDialog(motorcycle, "delete")}
-            >
-              <MdDeleteOutline />
             </button>
           </div>
         );
@@ -148,48 +136,27 @@ export const Company = () => {
       <div className="w-full py-8">
         <DataTable columns={columns} data={companies} />
       </div>
-      {/* Dialog avec contenu conditionnel */}
       <Dialog open={!!actionType} onOpenChange={closeDialog}>
         <DialogContent>
           {selectedCompany && actionType === "company" && <div></div>}
 
-          {selectedCompany && actionType === "view" && (
-            <div>
-              <h2 className="text-lg font-bold">Détails de l'entreprise</h2>
-            </div>
-          )}
-
           {selectedCompany && actionType === "edit" && (
             <div>
-              <h2 className="text-lg font-bold">Modifier l'entreprise</h2>
-              {/* Ajoute ici un formulaire pour modifier la moto */}
+              <CompanyForm
+                closeDialog={closeDialog}
+                onSubmit={onEditSubmit}
+                selectedCompany={selectedCompany}
+              />
             </div>
           )}
 
           {actionType === "add" && (
             <div>
-              <h2 className="text-lg font-bold">Ajouter une Entreprise</h2>
-              {/* Ajoute ici un formulaire pour modifier la moto */}
-            </div>
-          )}
-
-          {selectedCompany && actionType === "delete" && (
-            <div>
-              <h2 className="text-lg font-bold text-red-500">
-                Supprimer l'entreprise
-              </h2>
-              <p>Êtes-vous sûr de vouloir supprimer {selectedCompany.name} ?</p>
-              <div className="flex justify-end space-x-2">
-                <button
-                  className="bg-gray-200 p-2 rounded"
-                  onClick={closeDialog}
-                >
-                  Annuler
-                </button>
-                <button className="bg-red-500 text-white p-2 rounded">
-                  Supprimer
-                </button>
-              </div>
+              <CompanyForm
+                closeDialog={closeDialog}
+                onSubmit={onCreateSubmit}
+                selectedCompany={null}
+              />
             </div>
           )}
         </DialogContent>
