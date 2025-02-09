@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -33,6 +34,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Maintenance } from "@/types/Maintenance";
 import { MaintenanceformSchema } from "@/types/zod/MaintenanceFormSchema";
+import { Breakdown } from "@/types/Breakdown";
 
 interface Props {
   onSubmit: (values: z.infer<typeof MaintenanceformSchema>) => void;
@@ -40,8 +42,22 @@ interface Props {
   closeDialog: () => void;
 }
 
+const translateBreakdownType = {
+  Frame: "Cadre",
+  Engine: "Moteur",
+  Fuel: "Carburant",
+  Brakes: "Freins",
+  "Wheels and Tire": "Roues et Pneus",
+  Battery: "Batterie",
+  Electrical: "Electrique",
+  Suspension: "Suspension",
+  Transmission: "Transmission",
+  Handlebars: "Guidon",
+};
+
 const MaintenanceForm = (props: Props) => {
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
+  const [breakdowns, setBreakdowns] = useState<Breakdown[]>([]);
 
   const formatDate = (date: Date) => {
     return (
@@ -59,16 +75,29 @@ const MaintenanceForm = (props: Props) => {
     );
   };
 
+  const fetchBreakdowns = async (motorcycleId: string) => {
+    console.log(motorcycleId);
+    const response = await fetch(
+      `http://localhost:3000/api/motorcycles/${motorcycleId}/breakdowns`
+    );
+    const data = await response.json();
+    console.log(data);
+    setBreakdowns(data.data);
+  };
+
   useEffect(() => {
+    if (props.selectedMaintenance) {
+      fetchBreakdowns(props.selectedMaintenance.motorcycleId);
+    }
+
     const fetchMotorcycles = async () => {
       const response = await fetch("http://localhost:3001/motorcycles");
       const data = await response.json();
-      console.log(data);
       setMotorcycles(data);
     };
 
     fetchMotorcycles();
-  }, []);
+  }, [props.selectedMaintenance]);
 
   const form = useForm<z.infer<typeof MaintenanceformSchema>>({
     resolver: zodResolver(MaintenanceformSchema),
@@ -79,6 +108,7 @@ const MaintenanceForm = (props: Props) => {
         ? formatDate(new Date(props.selectedMaintenance?.maintenanceDate))
         : formatDate(new Date()),
       description: props.selectedMaintenance?.description || "",
+      breakdownId: props.selectedMaintenance?.breakdownId || "",
       techniciansRecommendation:
         props.selectedMaintenance?.techniciansRecommendation || "",
       currentMotorcycleMileage:
@@ -113,7 +143,10 @@ const MaintenanceForm = (props: Props) => {
                 <FormLabel>Moto</FormLabel>
                 <Select
                   disabled={!!props.selectedMaintenance}
-                  onValueChange={field.onChange}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    fetchBreakdowns(value);
+                  }}
                   defaultValue={field.value}
                 >
                   <FormControl>
@@ -127,6 +160,50 @@ const MaintenanceForm = (props: Props) => {
                         {motorcycle.vin.value}
                       </SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="breakdownId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Accident</FormLabel>
+                <FormDescription>Optionnel</FormDescription>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={!!props.selectedMaintenance}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selectionner un Accident" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {breakdowns.length ? (
+                      breakdowns.map((breakdown) => (
+                        <SelectItem key={breakdown.id} value={breakdown.id}>
+                          {new Date(
+                            breakdown.breakdownDate
+                          ).toLocaleDateString()}{" "}
+                          -{" "}
+                          {
+                            translateBreakdownType[
+                              breakdown.breakdownType.value
+                            ]
+                          }
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem disabled value="Pas d'accident">
+                        Pas d'accident
+                      </SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />

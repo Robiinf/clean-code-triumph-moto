@@ -8,7 +8,6 @@ export interface Maintenance {
   description: string;
   techniciansRecommendation: string;
   currentMotorcycleMileage: { value: number };
-  replacedParts: ReplacedParts[];
   breakdownId?: string;
   maintenanceRecursionId?: string;
   replacedParts: ReplacedParts[];

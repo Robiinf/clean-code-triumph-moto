@@ -55,6 +55,11 @@ const Maintenance = () => {
   };
 
   function onCreateSubmit(values: z.infer<typeof MaintenanceformSchema>) {
+    values = {
+      ...values,
+      breakdownId: values.breakdownId !== "" ? values.breakdownId : undefined,
+    };
+
     const response = fetch("http://localhost:3000/api/maintenances", {
       method: "POST",
       headers: {
@@ -97,6 +102,11 @@ const Maintenance = () => {
   }
 
   function onEditSubmit(values: z.infer<typeof MaintenanceformSchema>) {
+    values = {
+      ...values,
+      breakdownId: values.breakdownId !== "" ? values.breakdownId : undefined,
+    };
+
     const response = fetch(
       `http://localhost:3000/api/maintenances/${selectedMaintenance?.id}`,
       {
