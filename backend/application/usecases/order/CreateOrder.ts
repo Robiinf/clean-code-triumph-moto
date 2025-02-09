@@ -26,9 +26,6 @@ export class CreateOrder {
       if (!sparePart) {
         return new SparePartNotFound();
       }
-      if (sparePart.stockQuantity < line.quantity) {
-        return new NegativeStockError();
-      }
 
       const orderLine = OrderLineEntity.create(
         "",
