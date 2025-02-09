@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
@@ -23,15 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { BreakdownformSchema } from "@/types/zod/BreakdownFormSchema";
-import { CalendarIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -39,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 interface Props {
   motorcycleId: string;
@@ -49,7 +41,7 @@ export const BreakdownForm = (props: Props) => {
   const form = useForm<z.infer<typeof BreakdownformSchema>>({
     resolver: zodResolver(BreakdownformSchema),
     defaultValues: {
-      breakdownDate: new Date(),
+      breakdownDate: "",
       breakdownType: undefined,
       breakdownDescription: "",
       motorcycleId: props.motorcycleId,
@@ -87,37 +79,16 @@ export const BreakdownForm = (props: Props) => {
             control={form.control}
             name="breakdownDate"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Date de la panne / Incident</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Selectionner une date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => date > new Date()}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+              <FormItem>
+                <FormLabel>Date de la panne</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="2025-10-01"
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
