@@ -64,9 +64,7 @@ const MotorcycleForm = (props: Props) => {
     <>
       <DialogHeader>
         <DialogTitle>
-          {props.selectedMotorcycle
-            ? "Modifier la Maintenance"
-            : "Créer une Maintenance"}
+          {props.selectedMotorcycle ? "Modifier une moto" : "Ajouter une moto"}
         </DialogTitle>
         <DialogDescription>
           Veuillez remplir tous les champs obligatoires

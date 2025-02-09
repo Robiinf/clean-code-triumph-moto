@@ -180,7 +180,7 @@ const WarrantyForm = (props: Props) => {
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Description de la pièce"
+                    placeholder="Description de la garantie"
                     className="resize-none"
                     {...field}
                   />

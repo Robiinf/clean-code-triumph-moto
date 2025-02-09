@@ -38,7 +38,7 @@ const BreakdownList = ({ motorcycle }: Props) => {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Liste des pannes?</DialogTitle>
+        <DialogTitle>Liste des pannes</DialogTitle>
         <DialogDescription>
           Concernant {motorcycle.model} de l'année {motorcycle.year}
         </DialogDescription>
