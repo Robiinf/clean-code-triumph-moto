@@ -7,6 +7,7 @@ import { ZodTestDriveValidator } from "../../validation/implementations/zod/ZodT
 import { CreateTestDrive } from "../../../../application/usecases/testDrive/CreateTestDrive";
 import { ListTestDriveByDriver } from "../../../../application/usecases/testDrive/ListTestDriveByDriver";
 import { ListTestDriveByVehicule } from "../../../../application/usecases/testDrive/ListTestDriveByVehicule";
+import { ListAllTestDrive } from "../../../../application/usecases/testDrive/ListAllTestDrive";
 
 export class TestDriveController {
   private driverRepository: DriverRepository;
@@ -63,6 +64,35 @@ export class TestDriveController {
       }
 
       res.status(201).json({
+        status: "success",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  listAllTestDrive = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const listAllTestDriveUseCase = new ListAllTestDrive(
+        this.testDriveRepository
+      );
+
+      const result = await listAllTestDriveUseCase.execute();
+
+      if (result instanceof Error) {
+        res.status(400).json({
+          status: "error",
+          message: result.name,
+        });
+        return;
+      }
+
+      res.status(200).json({
         status: "success",
         data: result,
       });

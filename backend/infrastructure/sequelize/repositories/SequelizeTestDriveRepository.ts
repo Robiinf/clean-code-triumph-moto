@@ -19,6 +19,11 @@ export class SequelizeTestDriveRepository implements TestDriveRepository {
     );
   }
 
+  async findall(): Promise<TestDriveEntity[]> {
+    const testDrives = await TestDriveModel.findAll();
+    return testDrives.map((testDrive) => this.toEntity(testDrive));
+  }
+
   async save(testDrive: TestDriveEntity): Promise<void> {
     const data = {
       id: testDrive.id,

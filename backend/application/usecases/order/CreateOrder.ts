@@ -51,7 +51,7 @@ export class CreateOrder {
       );
       await this.sparePartRepository.updateStockQuantity(
         line.sparePartId,
-        sparePart!.stockQuantity - line.quantity
+        sparePart!.stockQuantity + line.quantity
       );
     }
 

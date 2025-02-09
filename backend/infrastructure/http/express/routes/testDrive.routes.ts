@@ -5,6 +5,7 @@ export const testDriveRoutes = () => {
   const router = Router();
   const controller = new TestDriveController();
 
+  router.get("/test-drives", controller.listAllTestDrive);
   router.post("/test-drives", controller.createTestDrive);
   router.get("/driver/:driverId/test-drives", controller.listTestDriveByDriver);
   router.get(
