@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { SparePart } from "@/types/SparePart";
+import { SparePart } from "@/types/SquarePart";
 import { z } from "zod";
 
 interface Props {

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 // icons
 import { Button } from "@/components/ui/button";
 import SparePartForm from "@/modals/SparePartForm";
-import type { SparePart } from "@/types/SparePart";
+import type { SparePart } from "@/types/SquarePart";
 import { SparePartformSchema } from "@/types/zod/SparePartFormSchema";
 import { MdOutlineModeEdit, MdOutlineRemoveRedEye } from "react-icons/md";
 import { z } from "zod";

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
-import { SparePart } from "@/types/SparePart";
+import { SparePart } from "@/types/SquarePart";
 import { SparePartformSchema } from "@/types/zod/SparePartFormSchema";
 import { Textarea } from "@/components/ui/textarea";
 

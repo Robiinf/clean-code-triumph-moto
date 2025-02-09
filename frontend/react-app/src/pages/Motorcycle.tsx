@@ -7,7 +7,11 @@ import { useEffect, useState } from "react";
 import BreakdownList from "@/modals/BreakdownList";
 import { GrHostMaintenance } from "react-icons/gr";
 import { LuWrench } from "react-icons/lu";
-import { MdOutlineModeEdit, MdOutlineRemoveRedEye } from "react-icons/md";
+import {
+  MdOutlineModeEdit,
+  MdOutlineRemoveRedEye,
+  MdOutlineAddHomeWork,
+} from "react-icons/md";
 
 //components
 import { Button } from "@/components/ui/button";
@@ -19,13 +23,20 @@ import type { Motorcycle } from "@/types/Motorcycle";
 import { MotorcycleformSchema } from "@/types/zod/MotorcycleFormSchema";
 import { z } from "zod";
 import MaintenanceOnMotorcycle from "@/modals/MaintenanceOnMotorcycle";
+import BreakdownForm from "@/modals/BreakdownForm";
 
 const Motorcycle = () => {
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
   const [selectedMotorcycle, setSelectedMotorcycle] =
     useState<Motorcycle | null>(null);
   const [actionType, setActionType] = useState<
-    "view" | "edit" | "add" | "maintenance" | "breakdown" | null
+    | "view"
+    | "edit"
+    | "add"
+    | "maintenance"
+    | "breakdown"
+    | "addBreakdown"
+    | null
   >(null);
 
   const fetchMotorcycles = async () => {
@@ -78,7 +89,13 @@ const Motorcycle = () => {
 
   const openDialog = (
     motorcycle: Motorcycle | null,
-    action: "view" | "add" | "edit" | "maintenance" | "breakdown"
+    action:
+      | "view"
+      | "add"
+      | "edit"
+      | "maintenance"
+      | "breakdown"
+      | "addBreakdown"
   ) => {
     setSelectedMotorcycle(motorcycle);
     setActionType(action);
@@ -146,7 +163,6 @@ const Motorcycle = () => {
               <MdOutlineRemoveRedEye />
             </button>
 
-            {/* Bouton Modifier */}
             <button
               className="text-sky-500"
               onClick={() => openDialog(motorcycle, "edit")}
@@ -154,7 +170,6 @@ const Motorcycle = () => {
               <MdOutlineModeEdit />
             </button>
 
-            {/* Bouton Pannes */}
             <button
               className="text-orange-500"
               onClick={() => openDialog(motorcycle, "breakdown")}
@@ -162,12 +177,17 @@ const Motorcycle = () => {
               <LuWrench />
             </button>
 
-            {/* Bouton Supprimer */}
             <button
               className="text-orange-500"
               onClick={() => openDialog(motorcycle, "maintenance")}
             >
               <GrHostMaintenance />
+            </button>
+            <button
+              className="text-orange-500"
+              onClick={() => openDialog(motorcycle, "addBreakdown")}
+            >
+              <MdOutlineAddHomeWork />
             </button>
           </div>
         );
@@ -215,6 +235,13 @@ const Motorcycle = () => {
 
           {selectedMotorcycle && actionType === "maintenance" && (
             <MaintenanceOnMotorcycle motorcycle={selectedMotorcycle} />
+          )}
+
+          {selectedMotorcycle && actionType === "addBreakdown" && (
+            <BreakdownForm
+              closeDialog={closeDialog}
+              motorcycleId={selectedMotorcycle.id}
+            />
           )}
         </DialogContent>
       </Dialog>

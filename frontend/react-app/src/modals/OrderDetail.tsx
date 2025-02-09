@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { Order } from "@/types/Order";
-import { SparePart } from "@/types/SparePart";
+import { SparePart } from "@/types/SquarePart";
 import { useEffect, useState } from "react";
 
 interface Props {
