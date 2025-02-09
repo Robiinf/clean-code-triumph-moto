@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 // icons
 import { FaMotorcycle } from "react-icons/fa";
 import { MdOutlineModeEdit, MdOutlineRemoveRedEye } from "react-icons/md";
+import { PiPuzzlePiece } from "react-icons/pi";
 
 //Entity
 import { Button } from "@/components/ui/button";
@@ -15,13 +16,15 @@ import MotorcycleOnMaintenace from "@/modals/MotorcycleOnMaintenace";
 import type { Maintenance } from "@/types/Maintenance";
 import { MaintenanceformSchema } from "@/types/zod/MaintenanceFormSchema";
 import { z } from "zod";
+import SparePartOnMaintenance from "@/modals/SparePartOnMaintenance";
+import { MaintenanceSparePartformSchema } from "@/types/zod/MaintenanceSparePartFormSchema";
 
 const Maintenance = () => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [selectedMaintenance, setSelectedMaintenance] =
     useState<Maintenance | null>(null);
   const [actionType, setActionType] = useState<
-    "view" | "edit" | "add" | "motorcycle" | null
+    "view" | "edit" | "add" | "motorcycle" | "sparePart" | null
   >(null);
 
   useEffect(() => {
@@ -40,7 +43,7 @@ const Maintenance = () => {
 
   const openDialog = (
     maintenance: Maintenance | null,
-    action: "view" | "edit" | "add" | "motorcycle"
+    action: "view" | "edit" | "add" | "motorcycle" | "sparePart"
   ) => {
     setSelectedMaintenance(maintenance);
     setActionType(action);
@@ -65,6 +68,31 @@ const Maintenance = () => {
       setMaintenances((prev) => [...prev, data.data]);
     });
 
+    closeDialog();
+  }
+
+  function onSparePartEditSubmit(
+    values: z.infer<typeof MaintenanceSparePartformSchema>
+  ) {
+    const props = {
+      replacedParts: values.replacedParts,
+    };
+
+    const response = fetch(
+      `http://localhost:3000/api/maintenances/${selectedMaintenance?.id}/replaced-parts`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(props),
+      }
+    );
+
+    response.then(async (res) => {
+      const data = await res.json();
+      console.log(data);
+    });
     closeDialog();
   }
 
@@ -130,6 +158,13 @@ const Maintenance = () => {
             </button>
 
             <button
+              className="text-orange-500"
+              onClick={() => openDialog(maintenance, "sparePart")}
+            >
+              <PiPuzzlePiece />
+            </button>
+
+            <button
               className="text-sky-500"
               onClick={() => openDialog(maintenance, "edit")}
             >
@@ -157,6 +192,13 @@ const Maintenance = () => {
         <DialogContent>
           {selectedMaintenance && actionType === "motorcycle" && (
             <MotorcycleOnMaintenace maintenance={selectedMaintenance} />
+          )}
+
+          {selectedMaintenance && actionType === "sparePart" && (
+            <SparePartOnMaintenance
+              maintenance={selectedMaintenance}
+              onSubmit={onSparePartEditSubmit}
+            />
           )}
 
           {selectedMaintenance && actionType === "view" && (

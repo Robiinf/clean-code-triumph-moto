@@ -11,7 +11,7 @@ type ReplacedPartInput = {
   quantity: number;
 };
 
-export class UpdateMaintenance {
+export class UpdateMaintenanceReplacedPart {
   constructor(
     private maintenanceRepository: MaintenanceRepository,
     private sparePartRepository: SparePartRepository
@@ -19,8 +19,6 @@ export class UpdateMaintenance {
 
   async execute(
     id: string,
-    description: string,
-    techniciansRecommendation: string,
     replacedParts: ReplacedPartInput[]
   ): Promise<MaintenanceEntity | Error> {
     const existingMaintenance = await this.maintenanceRepository.findById(id);
@@ -53,8 +51,8 @@ export class UpdateMaintenance {
       existingMaintenance.motorcycleId,
       existingMaintenance.maintenanceDate,
       existingMaintenance.maintenanceType,
-      description,
-      techniciansRecommendation,
+      existingMaintenance.description,
+      existingMaintenance.techniciansRecommendation,
       existingMaintenance.currentMotorcycleMileage,
       replacedPartEntities,
       existingMaintenance.breakdownId,

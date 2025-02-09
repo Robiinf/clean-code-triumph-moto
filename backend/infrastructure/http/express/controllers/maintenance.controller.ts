@@ -10,6 +10,7 @@ import { GetMaintenances } from "../../../../application/usecases/maintenance/Ge
 import { GetMaintenanceByBreakdown } from "../../../../application/usecases/maintenance/GetMaintenanceByBreakdown";
 import { ZodMaintenanceValidator } from "../../validation/implementations/zod/ZodMaintenanceValidator";
 import { MaintenanceRecursionRepository } from "../../../../application/repositories/MaintenanceRecursionRepository";
+import { UpdateMaintenanceReplacedPart } from "../../../../application/usecases/maintenance/UpdateMaintenanceReplacedPart";
 
 export class MaintenanceController {
   private maintenanceRepository: MaintenanceRepository;
@@ -113,6 +114,43 @@ export class MaintenanceController {
         validationResult.data.description,
         validationResult.data.techniciansRecommendation,
         validationResult.data.replacedParts
+      );
+
+      if (result instanceof Error) {
+        res.status(400).json({
+          status: "error",
+          message: result.name,
+        });
+        return;
+      }
+
+      res.status(200).json({
+        status: "success",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateMaintenanceSpareParts = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const { replacedParts } = req.body;
+
+      const updateMaintenanceReplacedPartUseCase =
+        new UpdateMaintenanceReplacedPart(
+          this.maintenanceRepository,
+          this.sparePartRepository
+        );
+
+      const result = await updateMaintenanceReplacedPartUseCase.execute(
+        id,
+        replacedParts
       );
 
       if (result instanceof Error) {

@@ -44,7 +44,7 @@ export class SequelizeMaintenanceRepository implements MaintenanceRepository {
         { transaction: t }
       );
 
-      for (const part of maintenance.replaceParts) {
+      for (const part of maintenance.replacedParts) {
         await ReplacedPartModel.upsert(
           {
             id: part.id,

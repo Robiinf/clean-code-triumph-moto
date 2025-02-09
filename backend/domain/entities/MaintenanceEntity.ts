@@ -12,7 +12,7 @@ export class MaintenanceEntity {
     public description: string,
     public techniciansRecommendation: string,
     public currentMotorcycleMileage: Mileage,
-    public replaceParts: ReplacedPartEntity[],
+    public replacedParts: ReplacedPartEntity[],
     public breakdownId?: string,
     public maintenanceRecursionId?: string
   ) {}
@@ -24,7 +24,7 @@ export class MaintenanceEntity {
     description: string,
     techniciansRecommendation: string,
     currentMotorcycleMileage: Mileage,
-    replaceParts: ReplacedPartEntity[],
+    replacedParts: ReplacedPartEntity[],
     breakdownId?: string,
     maintenanceRecursionId?: string
   ): MaintenanceEntity {
@@ -37,7 +37,7 @@ export class MaintenanceEntity {
       description,
       techniciansRecommendation,
       currentMotorcycleMileage,
-      replaceParts,
+      replacedParts,
       breakdownId,
       maintenanceRecursionId
     );
@@ -51,7 +51,7 @@ export class MaintenanceEntity {
     description: string,
     techniciansRecommendation: string,
     currentMotorcycleMileage: Mileage,
-    replaceParts: ReplacedPartEntity[],
+    replacedParts: ReplacedPartEntity[],
     breakdownId?: string,
     maintenanceRecursionId?: string
   ): MaintenanceEntity {
@@ -63,7 +63,7 @@ export class MaintenanceEntity {
       description,
       techniciansRecommendation,
       currentMotorcycleMileage,
-      replaceParts,
+      replacedParts,
       breakdownId,
       maintenanceRecursionId
     );

@@ -82,7 +82,7 @@ export class CreateMaintenance {
       maintenanceRecursionId
     );
 
-    maintenance.replaceParts.forEach(
+    maintenance.replacedParts.forEach(
       (part) => (part.maintenanceId = maintenance.id)
     );
 

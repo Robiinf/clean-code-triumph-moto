@@ -1,4 +1,4 @@
-export interface ReplaceParts {
+export interface ReplacedParts {
   id: string;
   maintenanceId: string;
   sparePartId: string;

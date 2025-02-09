@@ -7,6 +7,10 @@ export const maintenanceRoutes = () => {
 
   router.post("/maintenances", controller.createMaintenance);
   router.put("/maintenances/:id", controller.updateMaintenance);
+  router.put(
+    "/maintenances/:id/replaced-parts",
+    controller.updateMaintenanceSpareParts
+  );
   router.get("/maintenances", controller.getMaintenances);
   router.get(
     "/motorcycles/:motorcycleId/maintenances",

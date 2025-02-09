@@ -1,4 +1,4 @@
-import { ReplaceParts } from "./ReplacedPart";
+import { ReplacedParts } from "./ReplacedPart";
 
 export interface Maintenance {
   id: string;
@@ -8,7 +8,8 @@ export interface Maintenance {
   description: string;
   techniciansRecommendation: string;
   currentMotorcycleMileage: { value: number };
-  replaceParts: ReplaceParts[];
+  replacedParts: ReplacedParts[];
   breakdownId?: string;
   maintenanceRecursionId?: string;
+  replacedParts: ReplacedParts[];
 }
