@@ -6,6 +6,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+import { useState, useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 
 import { Motorcycle } from "@/types/Motorcycle";
@@ -15,6 +17,27 @@ interface Props {
 }
 
 const MotorcycleDetails = (props: Props) => {
+  const [maintenanceRecursions, setMaintenanceRecursions] = useState([]);
+
+  const fetchMaintenanceRecursions = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/motorcycles/${props.motorcycle.id}/maintenance-recursions`
+      );
+      const data = await response.json();
+      setMaintenanceRecursions(data.data);
+    } catch (error) {
+      console.error(
+        "Erreur lors du chargement des récurrences de maintenance :",
+        error
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchMaintenanceRecursions();
+  }, [props.motorcycle.id]);
+
   return (
     <>
       <DialogHeader>
@@ -52,7 +75,17 @@ const MotorcycleDetails = (props: Props) => {
         <p className="col-span-2">Transmission:</p>
         <p className="col-span-3">{props.motorcycle.transmission}</p>
       </div>
+      <div className="border-t border-gray-300 my-4"></div>
 
+      <h2 className="text-lg font-bold">Maintenances récurrentes</h2>
+      <ul>
+        {maintenanceRecursions.map((recursion) => (
+          <li key={recursion.id}>
+            {recursion.description} - {recursion.intervalKm} km /{" "}
+            {recursion.intervalMonths} mois
+          </li>
+        ))}
+      </ul>
       <DialogFooter className="sm:justify-start">
         <DialogClose asChild>
           <Button type="button" variant="secondary">

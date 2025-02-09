@@ -11,6 +11,7 @@ import {
   MdOutlineModeEdit,
   MdOutlineRemoveRedEye,
   MdOutlineAddHomeWork,
+  MdAvTimer,
 } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
@@ -18,6 +19,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import MotorcycleDetails from "@/modals/MotorcycleDetails";
 import MotorcycleForm from "@/modals/MotorcycleForm";
+import MaintenanceRecursionForm from "@/modals/MaintenanceRecursionForm";
 
 //types
 import type { Motorcycle } from "@/types/Motorcycle";
@@ -27,6 +29,7 @@ import MaintenanceOnMotorcycle from "@/modals/MaintenanceOnMotorcycle";
 import BreakdownForm from "@/modals/BreakdownForm";
 import WarrantyList from "@/modals/WarrantyList";
 import WarrantyForm from "@/modals/WarrantyForm";
+import { MaintenanceRecursionFormSchema } from "@/types/zod/MaintenanceRecursionFormSchema";
 
 const Motorcycle = () => {
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
@@ -41,6 +44,7 @@ const Motorcycle = () => {
     | "warranty"
     | "addBreakdown"
     | "addWarranty"
+    | "addMaintenanceRecursion"
     | null
   >(null);
 
@@ -92,6 +96,22 @@ const Motorcycle = () => {
     closeDialog();
   };
 
+  const createMaintenanceRecursion = (
+    values: z.infer<typeof MaintenanceRecursionFormSchema>
+  ) => {
+    const response = fetch(`http://localhost:3000/api/maintenance-recursions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    response.then(() => fetchMotorcycles());
+
+    closeDialog();
+  };
+
   const openDialog = (
     motorcycle: Motorcycle | null,
     action:
@@ -103,6 +123,7 @@ const Motorcycle = () => {
       | "addBreakdown"
       | "warranty"
       | "addWarranty"
+      | "addMaintenanceRecursion"
   ) => {
     setSelectedMotorcycle(motorcycle);
     setActionType(action);
@@ -204,6 +225,13 @@ const Motorcycle = () => {
             >
               <GrHostMaintenance />
             </button>
+
+            <button
+              className="text-blue-500"
+              onClick={() => openDialog(motorcycle, "addMaintenanceRecursion")}
+            >
+              <MdAvTimer />
+            </button>
           </div>
         );
       },
@@ -264,6 +292,14 @@ const Motorcycle = () => {
               motorcycle={selectedMotorcycle}
               onSubmit={() => {}}
               closeDialog={closeDialog}
+            />
+          )}
+
+          {selectedMotorcycle && actionType === "addMaintenanceRecursion" && (
+            <MaintenanceRecursionForm
+              motorcycle={selectedMotorcycle}
+              closeDialog={closeDialog}
+              onSubmit={createMaintenanceRecursion}
             />
           )}
 

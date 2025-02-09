@@ -23,6 +23,7 @@ interface Props {
       | "addBreakdown"
       | "warranty"
       | "addWarranty"
+      | "addMaintenanceRecursion"
       | null
     >
   >;
