@@ -12,6 +12,7 @@ import {
   MdOutlineRemoveRedEye,
   MdOutlineAddHomeWork,
 } from "react-icons/md";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 //components
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,8 @@ import { MotorcycleformSchema } from "@/types/zod/MotorcycleFormSchema";
 import { z } from "zod";
 import MaintenanceOnMotorcycle from "@/modals/MaintenanceOnMotorcycle";
 import BreakdownForm from "@/modals/BreakdownForm";
+import WarrantyList from "@/modals/WarrantyList";
+import WarrantyForm from "@/modals/WarrantyForm";
 
 const Motorcycle = () => {
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
@@ -35,7 +38,9 @@ const Motorcycle = () => {
     | "add"
     | "maintenance"
     | "breakdown"
+    | "warranty"
     | "addBreakdown"
+    | "addWarranty"
     | null
   >(null);
 
@@ -96,6 +101,8 @@ const Motorcycle = () => {
       | "maintenance"
       | "breakdown"
       | "addBreakdown"
+      | "warranty"
+      | "addWarranty"
   ) => {
     setSelectedMotorcycle(motorcycle);
     setActionType(action);
@@ -171,6 +178,13 @@ const Motorcycle = () => {
             </button>
 
             <button
+              className="text-cyan-500"
+              onClick={() => openDialog(motorcycle, "warranty")}
+            >
+              <IoDocumentTextOutline />
+            </button>
+
+            <button
               className="text-orange-500"
               onClick={() => openDialog(motorcycle, "breakdown")}
             >
@@ -178,16 +192,17 @@ const Motorcycle = () => {
             </button>
 
             <button
+              className="text-rose-700"
+              onClick={() => openDialog(motorcycle, "addBreakdown")}
+            >
+              <MdOutlineAddHomeWork />
+            </button>
+
+            <button
               className="text-orange-500"
               onClick={() => openDialog(motorcycle, "maintenance")}
             >
               <GrHostMaintenance />
-            </button>
-            <button
-              className="text-orange-500"
-              onClick={() => openDialog(motorcycle, "addBreakdown")}
-            >
-              <MdOutlineAddHomeWork />
             </button>
           </div>
         );
@@ -235,6 +250,21 @@ const Motorcycle = () => {
 
           {selectedMotorcycle && actionType === "maintenance" && (
             <MaintenanceOnMotorcycle motorcycle={selectedMotorcycle} />
+          )}
+
+          {selectedMotorcycle && actionType === "warranty" && (
+            <WarrantyList
+              motorcycle={selectedMotorcycle}
+              setActionType={setActionType}
+            />
+          )}
+
+          {selectedMotorcycle && actionType === "addWarranty" && (
+            <WarrantyForm
+              motorcycle={selectedMotorcycle}
+              onSubmit={() => {}}
+              closeDialog={closeDialog}
+            />
           )}
 
           {selectedMotorcycle && actionType === "addBreakdown" && (
