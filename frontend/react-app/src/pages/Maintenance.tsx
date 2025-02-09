@@ -27,17 +27,17 @@ const Maintenance = () => {
     "view" | "edit" | "add" | "motorcycle" | "sparePart" | null
   >(null);
 
-  useEffect(() => {
-    const fetchMaintenances = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/maintenances");
-        const data = await response.json();
-        setMaintenances(data.data);
-      } catch (error) {
-        console.error("Erreur lors du chargement des entreprises :", error);
-      }
-    };
+  const fetchMaintenances = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/maintenances");
+      const data = await response.json();
+      setMaintenances(data.data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des entreprises :", error);
+    }
+  };
 
+  useEffect(() => {
     fetchMaintenances();
   }, []);
 
@@ -94,10 +94,10 @@ const Maintenance = () => {
       }
     );
 
-    response.then(async (res) => {
-      const data = await res.json();
-      console.log(data);
+    response.then(async () => {
+      fetchMaintenances();
     });
+
     closeDialog();
   }
 
