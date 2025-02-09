@@ -126,8 +126,7 @@ export class DriverController {
         validationResult.data.phone,
         validationResult.data.email,
         new Date(validationResult.data.birthDate),
-        validationResult.data.companyId,
-        validationResult.data.driverLicenseId
+        validationResult.data.companyId
       );
 
       if (result instanceof Error) {
